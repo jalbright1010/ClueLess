@@ -5,7 +5,7 @@ This is a python implementation of Clue-Less, a simplified version of the popula
 
 In Clue-Less there are the same nine rooms, six weapons, and six people as in the board game. The main simplification is that navigation of the game board. The rules are essentially the asme except for the movement between the rooms.
 
-** Navigation of the Game Board **
+**Navigation of the Game Board**
 * The rooms are laid out in a 3x3 grid with a hallway separating each pair of adjacent rooms.
 * Each hallway only holds one person. If someone is currently in a hallway, you may not move there.
 * When it is your turn, you do not need to roll a die.
@@ -21,7 +21,7 @@ In Clue-Less there are the same nine rooms, six weapons, and six people as in th
 * Whenever a suggestion is made, the room must be the room that one making the suggestion is currently in. The suspect in the suggestion is moved to the room in the suggestion.
 * You may make an accusation at any time during your turn.
 
-** Requirements of the Game **
+**Requirements of the Game**
 * Each player should access the game from a separate computer, with a graphical user interface.
 * The game rules are the same as in regular Clue® except for the navigation (described above).
 * Each time the game state changes (a person is moved, a suggestion is made, a player disproves a suggestion, or a player is unable to disprove a suggestion) all players should be notified.
