@@ -1,7 +1,7 @@
 ClueLess
 ========
 
-This is a python implementation of Clue-Less, a simplified version of the popular board game, Clue®. 
+This is a python implementation of Clue-Less, a simplified version of the popular board game, Clue®. This project is for Foundations of Software Engineering at JHU. 
 
 In Clue-Less there are the same nine rooms, six weapons, and six people as in the board game. The main simplification is that navigation of the game board. The rules are essentially the asme except for the movement between the rooms.
 
