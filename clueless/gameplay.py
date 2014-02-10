@@ -17,7 +17,7 @@ class board(QtGui.QWidget):
 
     def paintEvent(self, e):
         qp = QtGui.QPainter()
-        qp.begin()
+        qp.begin(self)
         self.drawRectangles(qp)
         qp.end()
 

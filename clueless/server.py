@@ -11,15 +11,15 @@ class server():
     sock = None
     activeGames = []
     availableGames = []
-
-    def __init__(self):
+    
+    def __init__(self, host, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.setblocking(False)
         self.sock.bind((str(host), int(port)))
         self.sock.listen(1)
         print "Listening on %s" % ("%s:%s" % self.sock.getsockname())
-
+        
     def accept(self):
         return self.sock.accept()
 
@@ -57,7 +57,7 @@ class server():
             pass
 
 def main():
-    s = server('192.168.41.27', 4004)
+    s = server('127.0.0.1', 4004)
 
     while True:
         try:
