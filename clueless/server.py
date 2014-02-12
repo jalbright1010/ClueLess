@@ -5,6 +5,8 @@ import thread
 import time
 import sys
 import cPickle as pickle
+import uuid
+import gameplay 
 
 class server():
     users = {}
@@ -56,6 +58,11 @@ class server():
         except:
             pass
 
+    def createNewGame(self):
+        g = gameplay.game()
+        self.availableGames.append(g)
+        self.broadcastMessageToAll('Game created with id '+g.id)
+
 def main():
     s = server('127.0.0.1', 4004)
 
@@ -79,7 +86,7 @@ def main():
                     if splt[0] == 'function':
                         splt2 = splt[1].split(':')
                         if splt2[0] == 'createNewGame':
-                            pass
+                            s.createNewGame()
                         elif splt2[0] == 'joinGame':
                             pass
                         elif splt2[0] == 'requestingGames':

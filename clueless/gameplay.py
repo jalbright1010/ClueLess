@@ -1,6 +1,16 @@
 #!/usr/bin/python
 
 from PyQt4 import QtGui, QtCore
+import uuid
+
+class game():
+    id = ''
+    players = []
+    deck = {}
+    caseFile = {}
+
+    def __init__(self):
+        self.id = str(uuid.uuid4())
 
 class player():
     pass
@@ -53,6 +63,8 @@ class board(QtGui.QWidget):
         # Draw Rooms
         qp.setBrush(QtGui.QColor(0, 0, 0))
         qp.drawRect(x1Pos, y1Pos, rectSize, rectSize)
+        qp.setBrush(QtGui.QColor(255,255,255))
+        qp.drawText(x1Pos+18,y1Pos+14,'Library')
 
         qp.setBrush(QtGui.QColor(255, 255, 255))
         qp.drawRect(x2Pos, y1Pos, rectSize, rectSize)

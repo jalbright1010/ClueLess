@@ -73,7 +73,7 @@ class MainWindow(QtGui.QMainWindow):
         mainMenu = menubar.addMenu('File')
         create = QtGui.QAction('Create Game', self)
         create.setShortcut('Ctrl+G')
-        #create.triggered.connect(self.createGameLauncher)
+        create.triggered.connect(self.createGame)
         mainMenu.addAction(create)
         join = QtGui.QAction('Join Game', self)
         join.setShortcut('Ctrl+J')
@@ -118,6 +118,10 @@ class MainWindow(QtGui.QMainWindow):
             except (SystemExit, KeyboardInterrupt):
                 sys.exit()
         self.receiveThread = thread.start_new_thread(threaded, ())    
+
+    @QtCore.pyqtSlot()
+    def createGame(self):
+        self.client.send('function::createNewGame')
 
 def main():
     app = QtGui.QApplication(sys.argv)
