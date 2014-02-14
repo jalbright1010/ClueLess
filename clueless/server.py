@@ -13,6 +13,7 @@ class server():
     sock = None
     activeGames = []
     availableGames = []
+    game = None
     
     def __init__(self, host, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -20,7 +21,9 @@ class server():
         self.sock.setblocking(False)
         self.sock.bind((str(host), int(port)))
         self.sock.listen(1)
-        print "Listening on %s" % ("%s:%s" % self.sock.getsockname())
+        print 'Listening on %s' % ('%s:%s' % self.sock.getsockname())
+        self.game = gameplay.game()
+        print 'Game created with id %s' % self.game.id
         
     def accept(self):
         return self.sock.accept()
@@ -59,9 +62,17 @@ class server():
             pass
 
     def createNewGame(self):
-        g = gameplay.game()
-        self.availableGames.append(g)
-        self.broadcastMessageToAll('Game created with id '+g.id)
+        self.game = gameplay.game()
+        #self.availableGames.append(g)
+        self.broadcastMessageToAll('Game created with id '+self.game.id)
+        
+    def joinGame(self, name, char):
+        if self.game:
+            if len(self.game.players) < 6:
+                self.game.addPlayer(name, char)
+                self.broadcastMessageToAll('%s has joined the game as %s.' % (name, char))
+            else:
+                self.broadcastMessageToUser(name, 'Game already has 6 players, cannot join.')
 
 def main():
     s = server('127.0.0.1', 4004)
@@ -88,7 +99,7 @@ def main():
                         if splt2[0] == 'createNewGame':
                             s.createNewGame()
                         elif splt2[0] == 'joinGame':
-                            pass
+                            s.joinGame(name, splt2[1])
                         elif splt2[0] == 'requestingGames':
                             pass
                     elif splt[0] == 'message':

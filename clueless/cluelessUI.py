@@ -11,6 +11,7 @@ from PyQt4 import QtGui, QtCore
 class MainWindow(QtGui.QMainWindow):
     receiveSignal = QtCore.pyqtSignal(str)
     usernameSignal = QtCore.pyqtSignal()
+    characterSignal = QtCore.pyqtSignal()
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -19,6 +20,7 @@ class MainWindow(QtGui.QMainWindow):
         self.connectToServer(host, port)
 	self.receiveSignal.connect(self.appendMessage)
 	self.usernameSignal.connect(self.askForUsername)
+        self.characterSignal.connect(self.createCharacterPicker)
         self.initUI()
 	self.createReceiveThread()
         
@@ -44,6 +46,34 @@ class MainWindow(QtGui.QMainWindow):
 	self.client.send(str(self.getUsername.edit.text()))
 	self.getUsername.close()
 	self.inputWindow.setReadOnly(False)
+        self.characterSignal.emit()
+
+    @QtCore.pyqtSlot()
+    def createCharacterPicker(self):
+        self.getCharacter = QtGui.QWidget()
+        self.getCharacter.resize(250,250)
+        self.getCharacter.move(self.width()/2-62, self.height()/2-62)
+        form = QtGui.QFormLayout()
+        form.addRow(QtGui.QLabel('Pick your character for the game:'))
+        self.getCharacter.charList = QtGui.QListWidget()
+        for character in gameplay.PEOPLE:
+            self.getCharacter.charList.addItem(character)
+        self.getCharacter.charList.setCurrentRow(0)
+        form.addRow(self.getCharacter.charList)
+        button = QtGui.QPushButton('Pick')
+        button.setFixedSize(65,25)
+        button.clicked.connect(self.chooseCharacter)
+        form.addRow(button)
+        self.getCharacter.setLayout(form)
+        self.getCharacter.show()
+
+    def chooseCharacter(self):
+        character = str(self.getCharacter.charList.currentItem().text())
+        self.client.send('function::joinGame:'+character)
+        self.getCharacter.close()
+        self.gameboard.drawingPlayer = True
+        self.gameboard.player = character
+        self.gameboard.update()
 
     def connectToServer(self, host, port):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -64,8 +94,7 @@ class MainWindow(QtGui.QMainWindow):
 
         self.centralWidget.form = QtGui.QFormLayout()
         self.centralWidget.form.addRow(self.createBoard())
-	self.centralWidget.form.addRow(self.createMessageWindow())
-	self.centralWidget.form.addRow(self.createInputWindow())
+	self.centralWidget.form.addRow(self.createChatGroup(), self.createButtonGroup())
         self.centralWidget.setLayout(self.centralWidget.form)
 
     def createMenuBar(self):
@@ -77,26 +106,59 @@ class MainWindow(QtGui.QMainWindow):
         mainMenu.addAction(create)
         join = QtGui.QAction('Join Game', self)
         join.setShortcut('Ctrl+J')
-        #join.triggered.connect(self.sendGameRequest)
+        join.triggered.connect(self.joinGame)
         mainMenu.addAction(join)
         quit = QtGui.QAction('Exit', self)
         quit.setShortcut('Ctrl+Q')
         quit.triggered.connect(self.close)
         mainMenu.addAction(quit)
 
-    def createMessageWindow(self):
-	self.messageWindow = QtGui.QTextEdit()
+    def createChatGroup(self):
+        group = QtGui.QGroupBox()
+        form = QtGui.QFormLayout()
+
+        self.messageWindow = QtGui.QTextEdit(group)
 	self.messageWindow.setFixedWidth(self.width()/2)
         self.messageWindow.setFixedHeight(self.height()/4)
 	self.messageWindow.setReadOnly(True)
-	return self.messageWindow
 
-    def createInputWindow(self):
-	self.inputWindow = QtGui.QLineEdit()
+	self.inputWindow = QtGui.QLineEdit(group)
 	self.inputWindow.setFixedWidth(self.width()/2)
 	self.inputWindow.setReadOnly(True)
 	self.inputWindow.returnPressed.connect(self.sendMessage)
-	return self.inputWindow
+        
+        form.addRow(self.messageWindow)
+        form.addRow(self.inputWindow)
+        
+        group.setLayout(form)
+
+        return group
+
+    def createButtonGroup(self):
+        group = QtGui.QGroupBox()
+        grid = QtGui.QGridLayout()
+        
+        self.lButton = QtGui.QPushButton('Left')
+        self.rButton = QtGui.QPushButton('Right')
+        self.uButton = QtGui.QPushButton('Up')
+        self.dButton = QtGui.QPushButton('Down')
+        self.rdButton = QtGui.QPushButton('R Down')
+        self.ldButton = QtGui.QPushButton('L Down')
+        self.ruButton = QtGui.QPushButton('R Up')
+        self.luButton = QtGui.QPushButton('L Up')
+
+        grid.addWidget(self.ldButton, 0, 0)
+        grid.addWidget(self.uButton, 0, 1)
+        grid.addWidget(self.rdButton, 0, 2)
+        grid.addWidget(self.lButton, 1, 0)
+        grid.addWidget(self.rButton, 1, 2)
+        grid.addWidget(self.ruButton, 2, 0)
+        grid.addWidget(self.dButton, 2, 1)
+        grid.addWidget(self.luButton, 2, 2)
+        
+        group.setLayout(grid)
+        
+        return group
 
     def sendMessage(self):
 	self.client.send('message::'+str(self.inputWindow.text()))
@@ -105,6 +167,9 @@ class MainWindow(QtGui.QMainWindow):
     def createBoard(self):
         self.gameboard = gameplay.board(self.width()/2, self.height()/2)
         return self.gameboard
+
+    def createKeys(self):
+        pass
 
     def createReceiveThread(self):
 	def threaded():
@@ -122,6 +187,9 @@ class MainWindow(QtGui.QMainWindow):
     @QtCore.pyqtSlot()
     def createGame(self):
         self.client.send('function::createNewGame')
+
+    def joinGame(self):
+        self.client.send('function::joinGame')
 
 def main():
     app = QtGui.QApplication(sys.argv)

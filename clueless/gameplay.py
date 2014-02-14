@@ -2,18 +2,88 @@
 
 from PyQt4 import QtGui, QtCore
 import uuid
+import random
+
+PEOPLE = ['Miss Scarlet', 'Colonel Mustard', 'Professor Plum',
+           'Mr. Green', 'Mrs. White', 'Mrs. Peacock']
+ROOMS = ['Ballroom', 'Billiard Room', 'Conservatory', 'Dining Room',
+         'Hall', 'Kitchen', 'Library', 'Lounge', 'Study']
+WEAPONS = ['Candlestick', 'Knife', 'Lead Pipe', 'Revolver',
+           'Rope', 'Wrench']
+HALLWAYS = ['Hall1', 'Hall2', 'Hall3', 'Hall4', 'Hall5', 
+            'Hall6', 'Hall7', 'Hall8', 'Hall9', 'Hall10']
 
 class game():
     id = ''
     players = []
-    deck = {}
     caseFile = {}
 
     def __init__(self):
         self.id = str(uuid.uuid4())
+        self.setup()
+    
+    def addPlayer(self, name, char):
+        p = player(name, char)
+        self.players.append(p)
+
+    def setup(self):
+        # Randomly choose the murder scenario
+        who = random.randint(0,5)
+        where = random.randint(0,8)
+        weapon = random.randint(0,5)
+        
+        # Create the case file for this game
+        self.caseFile['Who'] = PEOPLE[who]
+        self.caseFile['Where'] = ROOMS[where]
+        self.caseFile['Weapon'] = WEAPONS[weapon]
+        
+        # Set up a temporary list minus the chosen case file
+        # cards to give out to the game players
+        tmp = []
+        p = PEOPLE
+        p.pop(who)
+        r = ROOMS
+        r.pop(where)
+        w = WEAPONS
+        w.pop(weapon)
+        tmp.extend(p)
+        tmp.extend(r)
+        tmp.extend(w)
+        random.shuffle(tmp)
+        
+        # Dish out all remaining cards to the players in the game
+        #while len(tmp) > 0:
+        #    for player in self.players:
+        #        if len(tmp) != 0:
+        #            player.addCard(tmp.pop())
+
+class room():
+    id = ''
+    connections = []
+
+    def __init__(self, id, connections):
+        self.id = id
+        self.connections.extend(connections)
+
+class hallway():
+    id = ''
+    connections = []
+    
+    def __init__(self, id, connections):
+        self.id = id
+        self.connections.extend(connections)
 
 class player():
-    pass
+    name = ''
+    character = ''
+    cards = []
+
+    def __init__(self, name, char):
+        self.name = name
+        self.character = char
+ 
+    def addCard(self, card):
+        self.cards.extend(card)
 
 class notebook():
     pass
@@ -23,22 +93,25 @@ class board(QtGui.QWidget):
     def __init__(self, width, height):
         super(board, self).__init__()
         self.setFixedSize(width, height)
-        self.setLayout(QtGui.QFormLayout())
+        #self.setLayout(QtGui.QFormLayout())
+        self.update()
+        self.player = ''
+        self.drawingPlayer = False
 
     def paintEvent(self, e):
         qp = QtGui.QPainter()
-        qp.begin(self)
-        self.drawRectangles(qp)
-        qp.end()
+        self.draw(qp)
 
-    def drawRectangles(self, qp):
+    def draw(self, qp):
+        qp.begin(self)
+        
         color = QtGui.QColor(0, 0, 0)
         color.setNamedColor('#d4d4d4')
         qp.setPen(color)
 
         width = self.width()
         height = self.height()
-        rectSize = width/8
+        self.rectSize = width/8
         x1Pos = (width/8) - (rectSize/2)
         x2Pos = (width/2) - (rectSize/2)
         x3Pos = (7*width/8) - (rectSize/2)
@@ -63,6 +136,7 @@ class board(QtGui.QWidget):
         # Draw Rooms
         qp.setBrush(QtGui.QColor(0, 0, 0))
         qp.drawRect(x1Pos, y1Pos, rectSize, rectSize)
+        
         qp.setBrush(QtGui.QColor(255,255,255))
         qp.drawText(x1Pos+18,y1Pos+14,'Library')
 
@@ -126,3 +200,12 @@ class board(QtGui.QWidget):
         
         qp.setBrush(QtGui.QColor(100, 100, 100))
         qp.drawRect(hallx5Pos, hally5Pos, hallWidth, hallHeight)
+        
+	# Draw a player token 
+        if self.drawingPlayer:
+            center = QtCore.QPoint(100,100)
+        
+            qp.setBrush(QtGui.QColor(100,200,100))
+            qp.drawEllipse(center, size, size)   
+
+        qp.end()
