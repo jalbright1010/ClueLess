@@ -12,11 +12,12 @@ class MainWindow(QtGui.QMainWindow):
     receiveSignal = QtCore.pyqtSignal(str)
     usernameSignal = QtCore.pyqtSignal()
     characterSignal = QtCore.pyqtSignal()
-
+    gameStartSignal = QtCore.pyqtSignal()
+    
     def __init__(self):
         super(MainWindow, self).__init__()
-        host = '98.218.228.27'
-        port = 1010
+        host = '10.0.1.10'
+        port = 4004
         self.connectToServer(host, port)
         self.receiveSignal.connect(self.appendMessage)
         self.usernameSignal.connect(self.askForUsername)
@@ -75,6 +76,10 @@ class MainWindow(QtGui.QMainWindow):
         self.gameboard.player = character
         self.gameboard.update()
 
+    @QtCore.pyqtSlot()
+    def gameStart(self):
+        
+
     def connectToServer(self, host, port):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
@@ -102,11 +107,11 @@ class MainWindow(QtGui.QMainWindow):
         mainMenu = menubar.addMenu('File')
         create = QtGui.QAction('Create Game', self)
         create.setShortcut('Ctrl+G')
-        create.triggered.connect(self.createGame)
+        #create.triggered.connect(self.createGame)
         mainMenu.addAction(create)
         join = QtGui.QAction('Join Game', self)
         join.setShortcut('Ctrl+J')
-        join.triggered.connect(self.joinGame)
+        #join.triggered.connect(self.joinGame)
         mainMenu.addAction(join)
         quit = QtGui.QAction('Exit', self)
         quit.setShortcut('Ctrl+Q')
@@ -146,7 +151,7 @@ class MainWindow(QtGui.QMainWindow):
         self.ldButton = QtGui.QPushButton('L Down')
         self.ruButton = QtGui.QPushButton('R Up')
         self.luButton = QtGui.QPushButton('L Up')
-
+        
         grid.addWidget(self.ldButton, 0, 0)
         grid.addWidget(self.uButton, 0, 1)
         grid.addWidget(self.rdButton, 0, 2)
@@ -155,7 +160,7 @@ class MainWindow(QtGui.QMainWindow):
         grid.addWidget(self.ruButton, 2, 0)
         grid.addWidget(self.dButton, 2, 1)
         grid.addWidget(self.luButton, 2, 2)
-        
+            
         group.setLayout(grid)
         
         return group
