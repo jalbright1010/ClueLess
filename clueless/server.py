@@ -34,8 +34,10 @@ class server():
                 conn.send('username')
                 try:
                     name = conn.recv(1024).strip()
+                    print 'received name'
                 except socket.error:
-                    continue
+                    print 'Socket connection error... exiting'
+                    sys.exit(1)
                 if name in self.users:
                     conn.send('Username already in use.\n')
                 elif name:
@@ -75,7 +77,7 @@ class server():
                 self.broadcastMessageToUser(name, 'Game already has 6 players, cannot join.')
 
 def main():
-    s = server('127.0.0.1', 4004)
+    s = server('', 4004)
 
     while True:
         try:

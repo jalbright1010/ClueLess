@@ -111,7 +111,7 @@ class board(QtGui.QWidget):
 
         width = self.width()
         height = self.height()
-        self.rectSize = width/8
+        rectSize = width/8
         x1Pos = (width/8) - (rectSize/2)
         x2Pos = (width/2) - (rectSize/2)
         x3Pos = (7*width/8) - (rectSize/2)
@@ -206,6 +206,6 @@ class board(QtGui.QWidget):
             center = QtCore.QPoint(100,100)
         
             qp.setBrush(QtGui.QColor(100,200,100))
-            qp.drawEllipse(center, size, size)   
+            qp.drawEllipse(center, rectSize/3, rectSize/3)   
 
         qp.end()

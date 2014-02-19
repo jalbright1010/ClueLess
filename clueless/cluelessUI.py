@@ -15,37 +15,37 @@ class MainWindow(QtGui.QMainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        host = '127.0.0.1'
-        port = 4004
+        host = '98.218.228.27'
+        port = 1010
         self.connectToServer(host, port)
-	self.receiveSignal.connect(self.appendMessage)
-	self.usernameSignal.connect(self.askForUsername)
+        self.receiveSignal.connect(self.appendMessage)
+        self.usernameSignal.connect(self.askForUsername)
         self.characterSignal.connect(self.createCharacterPicker)
         self.initUI()
-	self.createReceiveThread()
+        self.createReceiveThread()
         
     @QtCore.pyqtSlot(str)
     def appendMessage(self, message):
-	self.messageWindow.append(message)
-	self.messageWindow.moveCursor(QtGui.QTextCursor.End)
+	   self.messageWindow.append(message)
+	   self.messageWindow.moveCursor(QtGui.QTextCursor.End)
 
     @QtCore.pyqtSlot()
     def askForUsername(self):
-	self.getUsername = QtGui.QWidget()
-	self.getUsername.resize(250,100)
+    	self.getUsername = QtGui.QWidget()
+    	self.getUsername.resize(250,100)
         self.getUsername.move(self.width()/2-62,self.height()/2-25)
-	form = QtGui.QFormLayout()
-	form.addRow(QtGui.QLabel('Please enter your username:'))
-	self.getUsername.edit = QtGui.QLineEdit()
-	self.getUsername.edit.returnPressed.connect(self.sendUsername)
-	form.addRow(self.getUsername.edit)
-	self.getUsername.setLayout(form)
-	self.getUsername.show()
+    	form = QtGui.QFormLayout()
+    	form.addRow(QtGui.QLabel('Please enter your username:'))
+    	self.getUsername.edit = QtGui.QLineEdit()
+    	self.getUsername.edit.returnPressed.connect(self.sendUsername)
+    	form.addRow(self.getUsername.edit)
+    	self.getUsername.setLayout(form)
+    	self.getUsername.show()
 
     def sendUsername(self):
-	self.client.send(str(self.getUsername.edit.text()))
-	self.getUsername.close()
-	self.inputWindow.setReadOnly(False)
+    	self.client.send(str(self.getUsername.edit.text()))
+    	self.getUsername.close()
+    	self.inputWindow.setReadOnly(False)
         self.characterSignal.emit()
 
     @QtCore.pyqtSlot()
@@ -94,7 +94,7 @@ class MainWindow(QtGui.QMainWindow):
 
         self.centralWidget.form = QtGui.QFormLayout()
         self.centralWidget.form.addRow(self.createBoard())
-	self.centralWidget.form.addRow(self.createChatGroup(), self.createButtonGroup())
+        self.centralWidget.form.addRow(self.createChatGroup(), self.createButtonGroup())
         self.centralWidget.setLayout(self.centralWidget.form)
 
     def createMenuBar(self):
@@ -118,14 +118,14 @@ class MainWindow(QtGui.QMainWindow):
         form = QtGui.QFormLayout()
 
         self.messageWindow = QtGui.QTextEdit(group)
-	self.messageWindow.setFixedWidth(self.width()/2)
-        self.messageWindow.setFixedHeight(self.height()/4)
-	self.messageWindow.setReadOnly(True)
+        self.messageWindow.setFixedWidth(self.width() / 2)
+        self.messageWindow.setFixedHeight(self.height() / 4)
+        self.messageWindow.setReadOnly(True)
 
-	self.inputWindow = QtGui.QLineEdit(group)
-	self.inputWindow.setFixedWidth(self.width()/2)
-	self.inputWindow.setReadOnly(True)
-	self.inputWindow.returnPressed.connect(self.sendMessage)
+    	self.inputWindow = QtGui.QLineEdit(group)
+    	self.inputWindow.setFixedWidth(self.width() / 2)
+    	self.inputWindow.setReadOnly(True)
+    	self.inputWindow.returnPressed.connect(self.sendMessage)
         
         form.addRow(self.messageWindow)
         form.addRow(self.inputWindow)
@@ -161,8 +161,8 @@ class MainWindow(QtGui.QMainWindow):
         return group
 
     def sendMessage(self):
-	self.client.send('message::'+str(self.inputWindow.text()))
-	self.inputWindow.clear()
+        self.client.send('message::'+str(self.inputWindow.text()))
+        self.inputWindow.clear()
 
     def createBoard(self):
         self.gameboard = gameplay.board(self.width()/2, self.height()/2)
@@ -172,7 +172,7 @@ class MainWindow(QtGui.QMainWindow):
         pass
 
     def createReceiveThread(self):
-	def threaded():
+        def threaded():
             try:
                 while True:
                     s = self.client.recv(1024).strip()
