@@ -11,17 +11,18 @@ from PyQt4 import QtGui, QtCore
 class MainWindow(QtGui.QMainWindow):
     receiveSignal = QtCore.pyqtSignal(str)
     usernameSignal = QtCore.pyqtSignal()
-    characterSignal = QtCore.pyqtSignal()
-    gameStartSignal = QtCore.pyqtSignal()
-    
+    characterSignal = QtCore.pyqtSignal(str)
+    characterAddSignal = QtCore.pyqtSignal(str)
+
     def __init__(self):
         super(MainWindow, self).__init__()
-        host = '10.0.1.10'
+        host = '127.0.0.1'
         port = 4004
         self.connectToServer(host, port)
         self.receiveSignal.connect(self.appendMessage)
         self.usernameSignal.connect(self.askForUsername)
         self.characterSignal.connect(self.createCharacterPicker)
+        self.characterAddSignal.connect(self.drawCharacter)
         self.initUI()
         self.createReceiveThread()
         
@@ -47,10 +48,13 @@ class MainWindow(QtGui.QMainWindow):
     	self.client.send(str(self.getUsername.edit.text()))
     	self.getUsername.close()
     	self.inputWindow.setReadOnly(False)
-        self.characterSignal.emit()
+        self.sendCharRequest()
 
-    @QtCore.pyqtSlot()
-    def createCharacterPicker(self):
+    def sendCharRequest(self):
+        self.client.send('function::requestingChars')
+
+    @QtCore.pyqtSlot(str)
+    def createCharacterPicker(self, used):
         self.getCharacter = QtGui.QWidget()
         self.getCharacter.resize(250,250)
         self.getCharacter.move(self.width()/2-62, self.height()/2-62)
@@ -58,7 +62,8 @@ class MainWindow(QtGui.QMainWindow):
         form.addRow(QtGui.QLabel('Pick your character for the game:'))
         self.getCharacter.charList = QtGui.QListWidget()
         for character in gameplay.PEOPLE:
-            self.getCharacter.charList.addItem(character)
+            if character not in [x.character for x in pickle.loads(str(used))]:
+                self.getCharacter.charList.addItem(character)
         self.getCharacter.charList.setCurrentRow(0)
         form.addRow(self.getCharacter.charList)
         button = QtGui.QPushButton('Pick')
@@ -72,13 +77,15 @@ class MainWindow(QtGui.QMainWindow):
         character = str(self.getCharacter.charList.currentItem().text())
         self.client.send('function::joinGame:'+character)
         self.getCharacter.close()
-        self.gameboard.drawingPlayer = True
-        self.gameboard.player = character
+
+    @QtCore.pyqtSlot(str)
+    def drawCharacter(self, pickled):
+        self.gameboard.players = pickle.loads(str(pickled))
         self.gameboard.update()
 
     @QtCore.pyqtSlot()
     def gameStart(self):
-        
+        pass
 
     def connectToServer(self, host, port):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -105,18 +112,25 @@ class MainWindow(QtGui.QMainWindow):
     def createMenuBar(self):
         menubar = self.menuBar()
         mainMenu = menubar.addMenu('File')
-        create = QtGui.QAction('Create Game', self)
-        create.setShortcut('Ctrl+G')
-        #create.triggered.connect(self.createGame)
-        mainMenu.addAction(create)
-        join = QtGui.QAction('Join Game', self)
-        join.setShortcut('Ctrl+J')
-        #join.triggered.connect(self.joinGame)
-        mainMenu.addAction(join)
-        quit = QtGui.QAction('Exit', self)
-        quit.setShortcut('Ctrl+Q')
-        quit.triggered.connect(self.close)
-        mainMenu.addAction(quit)
+        start = QtGui.QAction('Start Game', self)
+        start.setShortcut('Ctrl+S')
+        start.triggered.connect(self.sendStartSignal)
+        mainMenu.addAction(start)
+        self.readyAction = QtGui.QAction('Ready to Start', self)
+        self.readyAction.setShortcut('Ctrl+R')
+        self.readyAction.triggered.connect(self.sendReadySignal)
+        mainMenu.addAction(self.readyAction)
+        q = QtGui.QAction('Exit', self)
+        q.setShortcut('Ctrl+Q')
+        q.triggered.connect(self.close)
+        mainMenu.addAction(q)
+
+    def sendStartSignal(self):
+        self.client.send('function::start')
+
+    def sendReadySignal(self):
+        self.client.send('function::ready')
+        self.readyAction.setEnabled(False)
 
     def createChatGroup(self):
         group = QtGui.QGroupBox()
@@ -183,18 +197,17 @@ class MainWindow(QtGui.QMainWindow):
                     s = self.client.recv(1024).strip()
                     if s == 'username':
                         self.usernameSignal.emit()
+                    elif ':' in s:
+                        splt = s.split(':')
+                        if splt[0] == 'characterAdded':
+                            self.characterAddSignal.emit(splt[1])
+                        elif splt[0] == 'usedChars':
+                            self.characterSignal.emit(splt[1])
                     else:
                         self.receiveSignal.emit(str(s))
             except (SystemExit, KeyboardInterrupt):
                 sys.exit()
         self.receiveThread = thread.start_new_thread(threaded, ())    
-
-    @QtCore.pyqtSlot()
-    def createGame(self):
-        self.client.send('function::createNewGame')
-
-    def joinGame(self):
-        self.client.send('function::joinGame')
 
 def main():
     app = QtGui.QApplication(sys.argv)

@@ -95,7 +95,7 @@ class board(QtGui.QWidget):
         self.setFixedSize(width, height)
         #self.setLayout(QtGui.QFormLayout())
         self.update()
-        self.player = ''
+        self.players = []
         self.drawingPlayer = False
 
     def paintEvent(self, e):
@@ -202,31 +202,31 @@ class board(QtGui.QWidget):
         qp.drawRect(hallx5Pos, hally5Pos, hallWidth, hallHeight)
         
         playerSize = rectSize/6
-	    # Draw a player token 
-        if self.drawingPlayer:
-            if self.player == 'Colonel Mustard':
+        # Draw a player token
+        for player in self.players:
+            if player.character == 'Colonel Mustard':
                 center = QtCore.QPoint(x3Pos+rectSize+hallWidth+playerSize/2,hally4Pos+hallHeight/2)
                 qp.setBrush(QtGui.QColor(204,204,0))
                 qp.drawEllipse(center, playerSize, playerSize)
-            elif self.player == 'Miss Scarlet':
+            elif player.character == 'Miss Scarlet':
                 center = QtCore.QPoint(x2Pos+rectSize+hallLength/2,hally1Pos-hallWidth-playerSize/2)
                 qp.setBrush(QtGui.QColor(240,0,0))
                 qp.drawEllipse(center, playerSize, playerSize)
-            elif self.player == 'Professor Plum':
+            elif player.character == 'Professor Plum':
                 center = QtCore.QPoint(x1Pos-playerSize/2,hally4Pos+hallHeight/2)
                 qp.setBrush(QtGui.QColor(153,51,102))
                 qp.drawEllipse(center, playerSize, playerSize)
-            elif self.player == 'Mrs. Peacock':
+            elif player.character == 'Mrs. Peacock':
                 center = QtCore.QPoint(x1Pos-playerSize/2,hally5Pos+hallHeight/2)
                 qp.setBrush(QtGui.QColor(0,0,245))
                 qp.drawEllipse(center, playerSize, playerSize)
-            elif self.player == 'Mr. Green':
+            elif player.character == 'Mr. Green':
                 center = QtCore.QPoint(hallx1Pos+hallLength/2,y3Pos+rectSize+playerSize/2)
                 qp.setBrush(QtGui.QColor(51,153,0))
                 qp.drawEllipse(center, playerSize, playerSize)
-            elif self.player == 'Mrs. White':
+            elif player.character == 'Mrs. White':
                 center = QtCore.QPoint(hallx2Pos+hallLength/2,y3Pos+rectSize+playerSize/2)
                 qp.setBrush(QtGui.QColor(255,255,255))
                 qp.drawEllipse(center, playerSize, playerSize)
-
+                    
         qp.end()

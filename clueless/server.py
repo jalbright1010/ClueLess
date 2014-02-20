@@ -14,7 +14,8 @@ class server():
     activeGames = []
     availableGames = []
     game = None
-    
+    playersReady = None
+
     def __init__(self, host, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -24,6 +25,7 @@ class server():
         print 'Listening on %s' % ('%s:%s' % self.sock.getsockname())
         self.game = gameplay.game()
         print 'Game created with id %s' % self.game.id
+        self.playersReady = []
         
     def accept(self):
         return self.sock.accept()
@@ -34,7 +36,6 @@ class server():
                 conn.send('username')
                 try:
                     name = conn.recv(1024).strip()
-                    print 'received name'
                 except socket.error:
                     print 'Socket connection error...'
                     break
@@ -73,11 +74,28 @@ class server():
             if len(self.game.players) < 6:
                 self.game.addPlayer(name, char)
                 self.broadcastMessageToAll('%s has joined the game as %s.' % (name, char))
+                pList = pickle.dumps(self.game.players)
+                for name, conn in self.users.items():
+                    try:
+                        conn.send('characterAdded:%s' % str(pList))
+                    except:
+                        pass
             else:
                 self.broadcastMessageToUser(name, 'Game already has 6 players, cannot join.')
 
+    def startGame(self):
+        print 'in start game function'
+        if self.game:
+            if len(self.playersReady) == len(self.users):
+                print 'All players are ready'
+            else:
+                print 'Not all players are ready to start.'
+                for name in self.users.keys():
+                    if name not in self.playersReady:
+                        print name,'is not ready to start'
+
 def main():
-    s = server('10.0.1.10', 4004)
+    s = server('127.0.0.1', 4004)
 
     while True:
         try:
@@ -102,8 +120,14 @@ def main():
                             s.createNewGame()
                         elif splt2[0] == 'joinGame':
                             s.joinGame(name, splt2[1])
-                        elif splt2[0] == 'requestingGames':
-                            pass
+                        elif splt2[0] == 'requestingChars':
+                            conn.send('usedChars:'+str(pickle.dumps(s.game.players)))
+                        elif splt2[0] == 'ready':
+                            s.broadcastMessageToAll('%s is ready to start!' % name)
+                            s.playersReady.append(name)
+                        elif splt2[0] == 'start':
+                            print 'starting game'
+                            s.startGame()
                     elif splt[0] == 'message':
                         s.broadcastMessageToAll('%s> %s' % (name, splt[1]))
                 else:
