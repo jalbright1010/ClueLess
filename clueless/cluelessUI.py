@@ -5,6 +5,7 @@ import time
 import sys
 import thread
 import cPickle as pickle
+import sip
 import gameplay
 from PyQt4 import QtGui, QtCore
 
@@ -13,16 +14,21 @@ class MainWindow(QtGui.QMainWindow):
     usernameSignal = QtCore.pyqtSignal()
     characterSignal = QtCore.pyqtSignal(str)
     characterAddSignal = QtCore.pyqtSignal(str)
+    turnSignal = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        host = '127.0.0.1'
+        #host = '98.218.228.27'
+        #host = '127.0.0.1'
+        host = '192.168.41.27'
+        #port = 40004
         port = 4004
         self.connectToServer(host, port)
         self.receiveSignal.connect(self.appendMessage)
         self.usernameSignal.connect(self.askForUsername)
         self.characterSignal.connect(self.createCharacterPicker)
         self.characterAddSignal.connect(self.drawCharacter)
+        self.turnSignal.connect(self.createMoves)
         self.initUI()
         self.createReceiveThread()
         
@@ -48,10 +54,6 @@ class MainWindow(QtGui.QMainWindow):
     	self.client.send(str(self.getUsername.edit.text()))
     	self.getUsername.close()
     	self.inputWindow.setReadOnly(False)
-        self.sendCharRequest()
-
-    def sendCharRequest(self):
-        self.client.send('function::requestingChars')
 
     @QtCore.pyqtSlot(str)
     def createCharacterPicker(self, used):
@@ -81,6 +83,7 @@ class MainWindow(QtGui.QMainWindow):
     @QtCore.pyqtSlot(str)
     def drawCharacter(self, pickled):
         self.gameboard.players = pickle.loads(str(pickled))
+        self.gameboard.drawingPlayer = True
         self.gameboard.update()
 
     @QtCore.pyqtSlot()
@@ -106,7 +109,7 @@ class MainWindow(QtGui.QMainWindow):
 
         self.centralWidget.form = QtGui.QFormLayout()
         self.centralWidget.form.addRow(self.createBoard())
-        self.centralWidget.form.addRow(self.createChatGroup(), self.createButtonGroup())
+        self.centralWidget.form.addRow(self.createChatGroup(), self.createMoveGroup())
         self.centralWidget.setLayout(self.centralWidget.form)
 
     def createMenuBar(self):
@@ -153,31 +156,37 @@ class MainWindow(QtGui.QMainWindow):
 
         return group
 
-    def createButtonGroup(self):
-        group = QtGui.QGroupBox()
-        grid = QtGui.QGridLayout()
+    def createMoveGroup(self):
+        self.moveGroup = QtGui.QGroupBox()
+        form = QtGui.QFormLayout()
+
+        form.addRow(QtGui.QLabel('Waiting for your turn...'))
         
-        self.lButton = QtGui.QPushButton('Left')
-        self.rButton = QtGui.QPushButton('Right')
-        self.uButton = QtGui.QPushButton('Up')
-        self.dButton = QtGui.QPushButton('Down')
-        self.rdButton = QtGui.QPushButton('R Down')
-        self.ldButton = QtGui.QPushButton('L Down')
-        self.ruButton = QtGui.QPushButton('R Up')
-        self.luButton = QtGui.QPushButton('L Up')
+        self.moveGroup.setLayout(form)
         
-        grid.addWidget(self.ldButton, 0, 0)
-        grid.addWidget(self.uButton, 0, 1)
-        grid.addWidget(self.rdButton, 0, 2)
-        grid.addWidget(self.lButton, 1, 0)
-        grid.addWidget(self.rButton, 1, 2)
-        grid.addWidget(self.ruButton, 2, 0)
-        grid.addWidget(self.dButton, 2, 1)
-        grid.addWidget(self.luButton, 2, 2)
-            
-        group.setLayout(grid)
+        return self.moveGroup
+
+    @QtCore.pyqtSlot(str)
+    def createMoves(self, pickled):
+        print pickled
+        moves = pickle.loads(str(pickled))
+        form = QtGui.QFormLayout()
         
-        return group
+        for move in moves:
+            label = QtGui.QLabel('Move to %s...' % move)
+            button = QtGui.QPushButton('Move')
+            button.clicked.connect(self.buttonClicked(move))
+            form.addRow(label,button)
+
+        for i in reversed(range(self.moveGroup.layout().count())):
+            sip.delete(self.moveGroup.layout().itemAt(i).widget())
+        sip.delete(self.moveGroup.layout())
+        self.moveGroup.setLayout(form)
+
+    def buttonClicked(self, move):
+        def clicked():
+            self.client.send('function::movePlayer:'+move)
+        return clicked
 
     def sendMessage(self):
         self.client.send('message::'+str(self.inputWindow.text()))
@@ -186,9 +195,6 @@ class MainWindow(QtGui.QMainWindow):
     def createBoard(self):
         self.gameboard = gameplay.board(self.width()/2, self.height()/2)
         return self.gameboard
-
-    def createKeys(self):
-        pass
 
     def createReceiveThread(self):
         def threaded():
@@ -203,6 +209,8 @@ class MainWindow(QtGui.QMainWindow):
                             self.characterAddSignal.emit(splt[1])
                         elif splt[0] == 'usedChars':
                             self.characterSignal.emit(splt[1])
+                        elif splt[0] == 'yourTurn':
+                            self.turnSignal.emit(splt[1])
                     else:
                         self.receiveSignal.emit(str(s))
             except (SystemExit, KeyboardInterrupt):
