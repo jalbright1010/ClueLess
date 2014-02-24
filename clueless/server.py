@@ -16,6 +16,7 @@ class server():
     availableGames = []
     game = None
     playersReady = None
+    playerLocations = {}
     
     def __init__(self, host, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -83,13 +84,11 @@ class server():
                 else:
                     self.game.addPlayer(name, char)
                     self.broadcastMessageToAll('%s has joined the game as %s.' % (name, char))
+                    self.playerLocations[char] = self.game.players[name].currentSpace.identifier
                     time.sleep(.1)
                     for name, conn in self.users.items():
                         try:
-                            conn.send('characterAdded:'+pickle.dumps({x:y for x,y in itertools.izip([x.character 
-                                                                                                     for x in self.game.players.values()],
-                                                                                                    [x.currentSpace.identifier 
-                                                                                                     for x in self.game.players.values()])}))
+                            conn.send('updateGameboard:'+pickle.dumps(self.playerLocations))
                         except:
                             pass
             else:
@@ -102,6 +101,15 @@ class server():
                 self.game.start()
                 self.broadcastMessageToAll('%s has started the game! Good Luck!' % name)
                 self.acceptingConnections = False
+                time.sleep(.1)
+                for char in gameplay.PEOPLE:
+                    if char not in self.playerLocations:
+                        self.playerLocations[char] = char+'Home'
+                for conn in self.users.values():
+                    conn.send('updateGameboard:'+pickle.dumps(self.playerLocations))
+                time.sleep(.1)
+                for name,conn in self.users.items():
+                    conn.send('cards:'+pickle.dumps([x.identifier for x in self.game.players[name].cards]))
                 self.sendTurnMessage()
             else:
                 self.broadcastMessageToUser(name, 'Not all players are ready to start....')
@@ -116,9 +124,16 @@ class server():
 	newSpace = self.game.board[space]
         if isinstance(newSpace, gameplay.hallway):
             newSpace.occupied = True
+        if isinstance(newSpace, gameplay.room):
+            self.users[name].send('suggestion')
         player.currentSpace = newSpace
-	if isinstance(oldSpace, gameplay.hallway):
+        self.playerLocations[player.character] = newSpace.identifier
+        for n,conn in self.users.items():
+            if n != name: 
+                conn.send('updateGameboard:'+pickle.dumps(self.playerLocations))
+        if isinstance(oldSpace, gameplay.hallway):
 	    oldSpace.occupied = False
+        
 
     def sendTurnMessage(self):
         conns = []
@@ -137,6 +152,39 @@ class server():
         self.game.turnOrder.append(self.game.turnOrder.pop(0))
         self.game.currentPlayer = self.game.turnOrder[0]
         self.sendTurnMessage()
+
+    def makeSuggestion(self, name, pickled):
+        suggestion = pickle.loads(str(pickled))
+        suspect = str(suggestion[0])
+        weapon = str(suggestion[1])
+        room = self.game.players[name].currentSpace.identifier
+        self.broadcastMessageToAll('%s suggests that the crime was committed in the %s by %s with the %s.' % (name,room,suspect,weapon)) 
+        if suspect in [x.character for x in self.game.players.values()]:
+            self.game.players[name].currentSpace = self.game.board[room]
+        self.playerLocations[suspect] = room
+        time.sleep(.1)
+        for conn in self.users.values():
+            conn.send('updateGameboard:'+pickle.dumps(self.playerLocations))
+        for i in range(1,len(self.game.turnOrder)):
+            person = self.game.turnOrder[i].name
+            cards = self.game.turnOrder[i].cards
+            cardIds = [x.identifier for x in cards]
+            show = []
+            if suspect in cardIds:
+                show.append(cards[cards.index(suspect)])
+            elif room in cards:
+                show.append(cards[cards.index(room)])
+            elif weapon in cards:
+                show.append(cards[card.index(weapon)])
+            if len(show) == 0:
+                continue
+            elif len(show) == 1:
+                self.users[name].send('%s has shown you the %s card.' % (person,show[0].identifier))
+                time.sleep(.1)
+                self.users[person].send('You have shown %s the %s card.' % (name,show[0].identifier))
+            elif len(show) > 1:
+                self.users[person].send('chooseCardToShow')
+            
 
 def main():
     #s = server('192.168.41.27', 4004)
@@ -176,12 +224,16 @@ def main():
                             s.movePlayer(name,splt2[1])
                         elif splt2[0] == 'endTurn':
                             s.endTurn(name)
+                        elif splt2[0] == 'makingSuggestion':
+                            s.makeSuggestion(name,splt2[1])
                     elif splt[0] == 'message':
                         s.broadcastMessageToAll('%s> %s' % (name, splt[1]))
                 else:
                     if not message:
                         # Empty string is given on disconnect
                         del s.users[name]
+                        if s.game:
+                            del s.game.players[name]
                         s.broadcastMessageToAll('--- %s leaves ---' % name)
             time.sleep(.1)
         except (SystemExit, KeyboardInterrupt):

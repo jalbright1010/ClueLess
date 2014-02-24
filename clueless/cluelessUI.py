@@ -13,8 +13,10 @@ class MainWindow(QtGui.QMainWindow):
     receiveSignal = QtCore.pyqtSignal(str)
     usernameSignal = QtCore.pyqtSignal()
     characterSignal = QtCore.pyqtSignal(str)
-    characterAddSignal = QtCore.pyqtSignal(str)
+    gameboardSignal = QtCore.pyqtSignal(str)
     turnSignal = QtCore.pyqtSignal(str)
+    suggestionSignal = QtCore.pyqtSignal()
+    cardSignal = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -27,8 +29,10 @@ class MainWindow(QtGui.QMainWindow):
         self.receiveSignal.connect(self.appendMessage)
         self.usernameSignal.connect(self.askForUsername)
         self.characterSignal.connect(self.createCharacterPicker)
-        self.characterAddSignal.connect(self.drawCharacter)
+        self.gameboardSignal.connect(self.drawGameboard)
         self.turnSignal.connect(self.createMoves)
+        self.suggestionSignal.connect(self.createSuggestionPicker)
+        self.cardSignal.connect(self.createCards)
         self.initUI()
         self.createReceiveThread()
         
@@ -64,7 +68,7 @@ class MainWindow(QtGui.QMainWindow):
         form.addRow(QtGui.QLabel('Pick your character for the game:'))
         self.getCharacter.charList = QtGui.QListWidget()
         for character in gameplay.PEOPLE:
-            if character not in [x.character for x in pickle.loads(str(used))]:
+            if character not in pickle.loads(str(used)):
                 self.getCharacter.charList.addItem(character)
         self.getCharacter.charList.setCurrentRow(0)
         form.addRow(self.getCharacter.charList)
@@ -83,7 +87,7 @@ class MainWindow(QtGui.QMainWindow):
         self.inputWindow.setReadOnly(False)
 
     @QtCore.pyqtSlot(str)
-    def drawCharacter(self, pickled):
+    def drawGameboard(self, pickled):
         self.gameboard.players = pickle.loads(str(pickled))
         self.gameboard.update()
 
@@ -104,8 +108,10 @@ class MainWindow(QtGui.QMainWindow):
 
         self.createMenuBar()
 
+        self.cardGroup = QtGui.QGroupBox()
+        self.cardGroup.setTitle('Cards')
         self.centralWidget.form = QtGui.QFormLayout()
-        self.centralWidget.form.addRow(self.createBoard())
+        self.centralWidget.form.addRow(self.createBoard(),self.cardGroup)
         self.centralWidget.form.addRow(self.createChatGroup(), self.createMoveGroup())
         self.centralWidget.setLayout(self.centralWidget.form)
 
@@ -194,6 +200,36 @@ class MainWindow(QtGui.QMainWindow):
             self.moveGroup.setLayout(form)
         return clicked
 
+    @QtCore.pyqtSlot()
+    def createSuggestionPicker(self):
+        self.suggestionPicker = QtGui.QWidget()
+        form = QtGui.QFormLayout()
+        form.addRow(QtGui.QLabel('Select the items for your suggestion:'))
+        self.suspectCombo = QtGui.QComboBox()
+        for suspect in gameplay.PEOPLE:
+            self.suspectCombo.addItem(suspect)
+        self.roomCombo = QtGui.QComboBox()
+        for room in gameplay.ROOMS:
+            self.roomCombo.addItem(room)
+        self.weaponCombo = QtGui.QComboBox()
+        for weapon in gameplay.WEAPONS:
+            self.weaponCombo.addItem(weapon)
+        button = QtGui.QPushButton('Make Suggestion')
+        button.clicked.connect(self.sendSuggestionMessage)
+        form.addRow(self.suspectCombo)
+        form.addRow(self.roomCombo)
+        form.addRow(self.weaponCombo)
+        form.addRow(button)
+        self.suggestionPicker.setLayout(form)
+        self.suggestionPicker.show()
+
+    def sendSuggestionMessage(self):
+        suggestion = [self.suspectCombo.currentText(),
+                      self.roomCombo.currentText(),
+                      self.weaponCombo.currentText()]
+        self.client.send('function::makingSuggestion:'+pickle.dumps(suggestion))
+        self.suggestionPicker.close()
+
     def sendEndTurnMessage(self):
         self.client.send('function::endTurn')
         form = QtGui.QFormLayout()
@@ -211,6 +247,14 @@ class MainWindow(QtGui.QMainWindow):
         self.gameboard = gameplay.board(self.width()/2, self.height()/2)
         return self.gameboard
 
+    @QtCore.pyqtSlot(str)
+    def createCards(self, pickled):
+        cards = pickle.loads(str(pickled))
+        form = QtGui.QFormLayout()
+        for card in cards:
+            form.addRow(QtGui.QLabel(card))
+        self.cardGroup.setLayout(form)
+
     def createReceiveThread(self):
         def threaded():
             try:
@@ -218,14 +262,18 @@ class MainWindow(QtGui.QMainWindow):
                     s = self.client.recv(1024).strip()
                     if s == 'username':
                         self.usernameSignal.emit()
+                    elif s == 'suggestion':
+                        self.suggestionSignal.emit()
                     elif ':' in s:
                         splt = s.split(':')
-                        if splt[0] == 'characterAdded':
-                            self.characterAddSignal.emit(splt[1])
+                        if splt[0] == 'updateGameboard':
+                            self.gameboardSignal.emit(splt[1])
                         elif splt[0] == 'usedChars':
                             self.characterSignal.emit(splt[1])
                         elif splt[0] == 'yourTurn':
                             self.turnSignal.emit(splt[1])
+                        elif splt[0] == 'cards':
+                            self.cardSignal.emit(splt[1])
                     else:
                         self.receiveSignal.emit(str(s))
             except (SystemExit, KeyboardInterrupt):

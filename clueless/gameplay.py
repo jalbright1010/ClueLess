@@ -31,7 +31,6 @@ class game():
         self.defaultOrder = ['Miss Scarlet', 'Colonel Mustard',
                              'Mrs. White', 'Mr. Green',
                              'Mrs. Peacock', 'Professor Plum']
-    
         self.board = self.createGameBoard()
 
     def addPlayer(self, name, char):
@@ -277,15 +276,15 @@ class board(QtGui.QWidget):
         # Study coordinates
         self.studyXPos = x1Pos
         self.studyYPos = y1Pos
-        self.studyTextXPos = self.studyXPos + self.playerSize/2
-        self.studyTextYPos = self.studyXPos + self.playerSize/2
-        self.studyMustardXPos = self.studyXPos + self.playerSize/2
+        self.studyTextXPos = self.studyXPos + self.playerSize
+        self.studyTextYPos = self.studyXPos + self.playerSize
+        self.studyMustardXPos = self.studyXPos + self.playerSize
         self.studyMustardYPos = self.studyYPos + self.rectSize/2
         self.studyScarletXPos = self.studyXPos + self.rectSize/2
         self.studyScarletYPos = self.studyYPos + self.rectSize/2
         self.studyPlumXPos = self.studyXPos + self.rectSize/2 + self.playerSize
         self.studyPlumYPos = self.studyYPos + self.rectSize/2
-        self.studyPeacockXPos = self.studyXPos + self.playerSize/2
+        self.studyPeacockXPos = self.studyXPos + self.playerSize
         self.studyPeacockYPos = self.studyYPos + self.rectSize/2 + self.playerSize
         self.studyGreenXPos = self.studyXPos + self.rectSize/2
         self.studyGreenYPos = self.studyYPos + self.rectSize/2 + self.playerSize
@@ -294,15 +293,15 @@ class board(QtGui.QWidget):
         # Hall Coordinates
         self.hallXPos = x2Pos
         self.hallYPos = y1Pos
-        self.hallTextXPos = self.hallXPos + self.playerSize/2
-        self.hallTextYPos = self.hallXPos + self.playerSize/2
-        self.hallMustardXPos = self.hallXPos + self.playerSize/2
+        self.hallTextXPos = self.hallXPos + self.playerSize
+        self.hallTextYPos = self.hallXPos + self.playerSize
+        self.hallMustardXPos = self.hallXPos + self.playerSize
         self.hallMustardYPos = self.hallYPos + self.rectSize/2
         self.hallScarletXPos = self.hallXPos + self.rectSize/2
         self.hallScarletYPos = self.hallYPos + self.rectSize/2
         self.hallPlumXPos = self.hallXPos + self.rectSize/2 + self.playerSize
         self.hallPlumYPos = self.hallYPos + self.rectSize/2
-        self.hallPeacockXPos = self.hallXPos + self.playerSize/2
+        self.hallPeacockXPos = self.hallXPos + self.playerSize
         self.hallPeacockYPos = self.hallYPos + self.rectSize/2 + self.playerSize
         self.hallGreenXPos = self.hallXPos + self.rectSize/2
         self.hallGreenYPos = self.hallYPos + self.rectSize/2 + self.playerSize
@@ -311,15 +310,15 @@ class board(QtGui.QWidget):
         # Lounge Coordinates
         self.loungeXPos = x3Pos
         self.loungeYPos = y1Pos
-        self.loungeTextXPos = self.loungeXPos + self.playerSize/2
-        self.loungeTextYPos = self.loungeXPos + self.playerSize/2
-        self.loungeMustardXPos = self.loungeXPos + self.playerSize/2
+        self.loungeTextXPos = self.loungeXPos + self.playerSize
+        self.loungeTextYPos = self.loungeXPos + self.playerSize
+        self.loungeMustardXPos = self.loungeXPos + self.playerSize
         self.loungeMustardYPos = self.loungeYPos + self.rectSize/2
         self.loungeScarletXPos = self.loungeXPos + self.rectSize/2
         self.loungeScarletYPos = self.loungeYPos + self.rectSize/2
         self.loungePlumXPos = self.loungeXPos + self.rectSize/2 + self.playerSize
         self.loungePlumYPos = self.loungeYPos + self.rectSize/2
-        self.loungePeacockXPos = self.loungeXPos + self.playerSize/2
+        self.loungePeacockXPos = self.loungeXPos + self.playerSize
         self.loungePeacockYPos = self.loungeYPos + self.rectSize/2 + self.playerSize
         self.loungeGreenXPos = self.loungeXPos + self.rectSize/2
         self.loungeGreenYPos = self.loungeYPos + self.rectSize/2 + self.playerSize
@@ -328,15 +327,15 @@ class board(QtGui.QWidget):
         # Library Coordinates
         self.libraryXPos = x1Pos
         self.libraryYPos = y2Pos
-        self.libraryTextXPos = self.libraryXPos + self.playerSize/2
-        self.libraryTextYPos = self.libraryXPos + self.playerSize/2
-        self.libraryMustardXPos = self.libraryXPos + self.playerSize/2
+        self.libraryTextXPos = self.libraryXPos + self.playerSize
+        self.libraryTextYPos = self.libraryXPos + self.playerSize
+        self.libraryMustardXPos = self.libraryXPos + self.playerSize
         self.libraryMustardYPos = self.libraryYPos + self.rectSize/2
         self.libraryScarletXPos = self.libraryXPos + self.rectSize/2
         self.libraryScarletYPos = self.libraryYPos + self.rectSize/2
         self.libraryPlumXPos = self.libraryXPos + self.rectSize/2 + self.playerSize
         self.libraryPlumYPos = self.libraryYPos + self.rectSize/2
-        self.libraryPeacockXPos = self.libraryXPos + self.playerSize/2
+        self.libraryPeacockXPos = self.libraryXPos + self.playerSize
         self.libraryPeacockYPos = self.libraryYPos + self.rectSize/2 + self.playerSize
         self.libraryGreenXPos = self.libraryXPos + self.rectSize/2
         self.libraryGreenYPos = self.libraryYPos + self.rectSize/2 + self.playerSize
@@ -345,15 +344,15 @@ class board(QtGui.QWidget):
         # Billiard Room Coordinates
         self.billiardXPos = x2Pos
         self.billiardYPos = y2Pos
-        self.billiardTextXPos = self.billiardXPos + self.playerSize/2
-        self.billiardTextYPos = self.billiardXPos + self.playerSize/2
-        self.billiardMustardXPos = self.billiardXPos + self.playerSize/2
+        self.billiardTextXPos = self.billiardXPos + self.playerSize
+        self.billiardTextYPos = self.billiardXPos + self.playerSize
+        self.billiardMustardXPos = self.billiardXPos + self.playerSize
         self.billiardMustardYPos = self.billiardYPos + self.rectSize/2
         self.billiardScarletXPos = self.billiardXPos + self.rectSize/2
         self.billiardScarletYPos = self.billiardYPos + self.rectSize/2
         self.billiardPlumXPos = self.billiardXPos + self.rectSize/2 + self.playerSize
         self.billiardPlumYPos = self.billiardYPos + self.rectSize/2
-        self.billiardPeacockXPos = self.billiardXPos + self.playerSize/2
+        self.billiardPeacockXPos = self.billiardXPos + self.playerSize
         self.billiardPeacockYPos = self.billiardYPos + self.rectSize/2 + self.playerSize
         self.billiardGreenXPos = self.billiardXPos + self.rectSize/2
         self.billiardGreenYPos = self.billiardYPos + self.rectSize/2 + self.playerSize
@@ -362,15 +361,15 @@ class board(QtGui.QWidget):
         # Dining Room Coordinates
         self.diningXPos = x3Pos
         self.diningYPos = y2Pos
-        self.diningTextXPos = self.diningXPos + self.playerSize/2
-        self.diningTextYPos = self.diningXPos + self.playerSize/2
-        self.diningMustardXPos = self.diningXPos + self.playerSize/2
+        self.diningTextXPos = self.diningXPos + self.playerSize
+        self.diningTextYPos = self.diningXPos + self.playerSize
+        self.diningMustardXPos = self.diningXPos + self.playerSize
         self.diningMustardYPos = self.diningYPos + self.rectSize/2
         self.diningScarletXPos = self.diningXPos + self.rectSize/2
         self.diningScarletYPos = self.diningYPos + self.rectSize/2
         self.diningPlumXPos = self.diningXPos + self.rectSize/2 + self.playerSize
         self.diningPlumYPos = self.diningYPos + self.rectSize/2
-        self.diningPeacockXPos = self.diningXPos + self.playerSize/2
+        self.diningPeacockXPos = self.diningXPos + self.playerSize
         self.diningPeacockYPos = self.diningYPos + self.rectSize/2 + self.playerSize
         self.diningGreenXPos = self.diningXPos + self.rectSize/2
         self.diningGreenYPos = self.diningYPos + self.rectSize/2 + self.playerSize
@@ -379,15 +378,15 @@ class board(QtGui.QWidget):
         # Conservatory Coordinates
         self.conservatoryXPos = x1Pos
         self.conservatoryYPos = y3Pos
-        self.conservatoryTextXPos = self.conservatoryXPos + self.playerSize/2
-        self.conservatoryTextYPos = self.conservatoryXPos + self.playerSize/2
-        self.conservatoryMustardXPos = self.conservatoryXPos + self.playerSize/2
+        self.conservatoryTextXPos = self.conservatoryXPos + self.playerSize
+        self.conservatoryTextYPos = self.conservatoryXPos + self.playerSize
+        self.conservatoryMustardXPos = self.conservatoryXPos + self.playerSize
         self.conservatoryMustardYPos = self.conservatoryYPos + self.rectSize/2
         self.conservatoryScarletXPos = self.conservatoryXPos + self.rectSize/2
         self.conservatoryScarletYPos = self.conservatoryYPos + self.rectSize/2
         self.conservatoryPlumXPos = self.conservatoryXPos + self.rectSize/2 + self.playerSize
         self.conservatoryPlumYPos = self.conservatoryYPos + self.rectSize/2
-        self.conservatoryPeacockXPos = self.conservatoryXPos + self.playerSize/2
+        self.conservatoryPeacockXPos = self.conservatoryXPos + self.playerSize
         self.conservatoryPeacockYPos = self.conservatoryYPos + self.rectSize/2 + self.playerSize
         self.conservatoryGreenXPos = self.conservatoryXPos + self.rectSize/2
         self.conservatoryGreenYPos = self.conservatoryYPos + self.rectSize/2 + self.playerSize
@@ -396,15 +395,15 @@ class board(QtGui.QWidget):
         # Ballroom Coordinates
         self.ballroomXPos = x2Pos
         self.ballroomYPos = y3Pos
-        self.ballroomTextXPos = self.ballroomXPos + self.playerSize/2
-        self.ballroomTextYPos = self.ballroomXPos + self.playerSize/2
-        self.ballroomMustardXPos = self.ballroomXPos + self.playerSize/2
+        self.ballroomTextXPos = self.ballroomXPos + self.playerSize
+        self.ballroomTextYPos = self.ballroomXPos + self.playerSize
+        self.ballroomMustardXPos = self.ballroomXPos + self.playerSize
         self.ballroomMustardYPos = self.ballroomYPos + self.rectSize/2
         self.ballroomScarletXPos = self.ballroomXPos + self.rectSize/2
         self.ballroomScarletYPos = self.ballroomYPos + self.rectSize/2
         self.ballroomPlumXPos = self.ballroomXPos + self.rectSize/2 + self.playerSize
         self.ballroomPlumYPos = self.ballroomYPos + self.rectSize/2
-        self.ballroomPeacockXPos = self.ballroomXPos + self.playerSize/2
+        self.ballroomPeacockXPos = self.ballroomXPos + self.playerSize
         self.ballroomPeacockYPos = self.ballroomYPos + self.rectSize/2 + self.playerSize
         self.ballroomGreenXPos = self.ballroomXPos + self.rectSize/2
         self.ballroomGreenYPos = self.ballroomYPos + self.rectSize/2 + self.playerSize
@@ -413,15 +412,15 @@ class board(QtGui.QWidget):
         # Kitchen Coordinates
         self.kitchenXPos = x3Pos
         self.kitchenYPos = y3Pos
-        self.kitchenTextXPos = self.kitchenXPos + self.playerSize/2
-        self.kitchenTextYPos = self.kitchenXPos + self.playerSize/2
-        self.kitchenMustardXPos = self.kitchenXPos + self.playerSize/2
+        self.kitchenTextXPos = self.kitchenXPos + self.playerSize
+        self.kitchenTextYPos = self.kitchenXPos + self.playerSize
+        self.kitchenMustardXPos = self.kitchenXPos + self.playerSize
         self.kitchenMustardYPos = self.kitchenYPos + self.rectSize/2
         self.kitchenScarletXPos = self.kitchenXPos + self.rectSize/2
         self.kitchenScarletYPos = self.kitchenYPos + self.rectSize/2
         self.kitchenPlumXPos = self.kitchenXPos + self.rectSize/2 + self.playerSize
         self.kitchenPlumYPos = self.kitchenYPos + self.rectSize/2
-        self.kitchenPeacockXPos = self.kitchenXPos + self.playerSize/2
+        self.kitchenPeacockXPos = self.kitchenXPos + self.playerSize
         self.kitchenPeacockYPos = self.kitchenYPos + self.rectSize/2 + self.playerSize
         self.kitchenGreenXPos = self.kitchenXPos + self.rectSize/2
         self.kitchenGreenYPos = self.kitchenYPos + self.rectSize/2 + self.playerSize
@@ -431,62 +430,62 @@ class board(QtGui.QWidget):
         self.shXPos = hallx1Pos
         self.shYPos = hally1Pos
         self.shPlayerXPos = self.shXPos + self.hallLength/2
-        self.shPlayerYPos = self.shYPos + self.playerSize/2
+        self.shPlayerYPos = self.shYPos + self.playerSize
         # HallLounge Coordinates
         self.hlXPos = hallx2Pos
         self.hlYPos = hally1Pos
         self.hlPlayerXPos = self.hlXPos + self.hallLength/2
-        self.hlPlayerYPos = self.hlYPos + self.playerSize/2
+        self.hlPlayerYPos = self.hlYPos + self.playerSize
         # StudyLibrary Coordinates
         self.slXPos = hallx3Pos
         self.slYPos = hally2Pos
-        self.slPlayerXPos = self.slXPos + self.playerSize/2
+        self.slPlayerXPos = self.slXPos + self.playerSize
         self.slPlayerYPos = self.slYPos + self.hallHeight/2
         # HallBilliardRoom Coordinates
         self.hbXPos = hallx4Pos
         self.hbYPos = hally2Pos
-        self.hbPlayerXPos = self.hbXPos + self.playerSize/2
+        self.hbPlayerXPos = self.hbXPos + self.playerSize
         self.hbPlayerYPos = self.hbYPos + self.hallHeight/2
         # LoungeDiningRoom Coordinates
         self.ldXPos = hallx5Pos
         self.ldYPos = hally2Pos
-        self.ldPlayerXPos = self.ldXPos + self.playerSize/2
+        self.ldPlayerXPos = self.ldXPos + self.playerSize
         self.ldPlayerYPos = self.ldYPos + self.hallHeight/2
         # LibraryBilliardRoom Coordinates
         self.lbXPos = hallx1Pos
         self.lbYPos = hally3Pos
         self.lbPlayerXPos = self.lbXPos + self.hallLength/2
-        self.lbPlayerYPos = self.lbYPos + self.playerSize/2
+        self.lbPlayerYPos = self.lbYPos + self.playerSize
         # BilliardRoomDiningRoom Coordinates
         self.bdXPos = hallx2Pos
         self.bdYPos = hally3Pos
         self.bdPlayerXPos = self.bdXPos + self.hallLength/2
-        self.bdPlayerYPos = self.bdYPos + self.playerSize/2
+        self.bdPlayerYPos = self.bdYPos + self.playerSize
         # LibraryConservatory Coordinates
         self.lcXPos = hallx3Pos
         self.lcYPos = hally4Pos
-        self.lcPlayerXPos = self.lcXPos + self.playerSize/2
+        self.lcPlayerXPos = self.lcXPos + self.playerSize
         self.lcPlayerYPos = self.lcYPos + self.hallHeight/2
         # BilliardRoomBallroom Coordinates
         self.bbXPos = hallx4Pos
         self.bbYPos = hally4Pos
-        self.bbPlayerXPos = self.bbXPos + self.playerSize/2
+        self.bbPlayerXPos = self.bbXPos + self.playerSize
         self.bbPlayerYPos = self.bbYPos + self.hallHeight/2
         # DiningRoomKitchen Coordinates
         self.dkXPos = hallx5Pos
         self.dkYPos = hally4Pos
-        self.dkPlayerXPos = self.dkXPos + self.playerSize/2
+        self.dkPlayerXPos = self.dkXPos + self.playerSize
         self.dkPlayerYPos = self.dkYPos + self.hallHeight/2
         # ConservatoryBallroom Coordinates
         self.cbXPos = hallx1Pos
         self.cbYPos = hally5Pos
         self.cbPlayerXPos = self.cbXPos + self.hallLength/2
-        self.cbPlayerYPos = self.cbYPos + self.playerSize/2
+        self.cbPlayerYPos = self.cbYPos + self.playerSize
         # BallroomKitchen Coordinates
         self.bkXPos = hallx2Pos
         self.bkYPos = hally5Pos
         self.bkPlayerXPos = self.bkXPos + self.hallLength/2
-        self.bkPlayerYPos = self.bkYPos + self.playerSize/2
+        self.bkPlayerYPos = self.bkYPos + self.playerSize
         # Colonel Mustard settings
         self.cmHomeXPos = x3Pos+self.rectSize+self.hallWidth+self.playerSize/2
         self.cmHomeYPos = hally2Pos+self.hallHeight/2
@@ -497,11 +496,11 @@ class board(QtGui.QWidget):
         self.msColor = QtGui.QColor(240,0,0)
         # Professor Plum settings
         self.ppHomeXPos = x1Pos-self.playerSize/2
-        self.ppHomeYPos = hally4Pos+self.hallHeight/2
+        self.ppHomeYPos = hally2Pos+self.hallHeight/2
         self.ppColor = QtGui.QColor(153,51,102)
         # Mrs.Peacock Settings
         self.mpHomeXPos = x1Pos-self.playerSize/2
-        self.mpHomeYPos = hally5Pos+self.hallHeight/2
+        self.mpHomeYPos = hally4Pos+self.hallHeight/2
         self.mpColor = QtGui.QColor(0,0,245)
         # Mr. Green Settings
         self.mgHomeXPos = hallx1Pos+self.hallLength/2
