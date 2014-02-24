@@ -86,11 +86,10 @@ class server():
                     time.sleep(.1)
                     for name, conn in self.users.items():
                         try:
-                            conn.send('characterAdded:'+pickle.dumps({x:y for x,y in
-                                                                      itertools.izip([x.character 
-                                                                                      for x in self.game.players.values()],
-                                                                                     [x.currentSpace.identifier 
-                                                                                      for x in self.game.players.values()])}))
+                            conn.send('characterAdded:'+pickle.dumps({x:y for x,y in itertools.izip([x.character 
+                                                                                                     for x in self.game.players.values()],
+                                                                                                    [x.currentSpace.identifier 
+                                                                                                     for x in self.game.players.values()])}))
                         except:
                             pass
             else:
@@ -113,11 +112,15 @@ class server():
 
     def movePlayer(self, name, space):
         player = self.game.players[name]
-        newSpace = self.game.board[space]
+        oldSpace = player.currentSpace
+	newSpace = self.game.board[space]
+        if isinstance(newSpace, gameplay.hallway):
+            newSpace.occupied = True
         player.currentSpace = newSpace
+	if isinstance(oldSpace, gameplay.hallway):
+	    oldSpace.occupied = False
 
     def sendTurnMessage(self):
-        self.broadcastMessageToAll('Awaiting %s to make his/her move...' % self.game.currentPlayer.name)
         conns = []
         for conn in self.game.currentPlayer.currentSpace.connections:
             if isinstance(conn, gameplay.hallway):
@@ -125,8 +128,15 @@ class server():
                     conns.append(conn)
             else:
                 conns.append(conn)
-        time.sleep(.1)
         self.users[self.game.currentPlayer.name].send('yourTurn:'+pickle.dumps([x.identifier for x in conns]))
+	time.sleep(.1)	
+	self.broadcastMessageToAll('Awaiting %s to make his/her move...' % self.game.currentPlayer.name)
+
+    def endTurn(self, name):
+        self.broadcastMessageToAll('%s has ended his/her turn...' % name)
+        self.game.turnOrder.append(self.game.turnOrder.pop(0))
+        self.game.currentPlayer = self.game.turnOrder[0]
+        self.sendTurnMessage()
 
 def main():
     #s = server('192.168.41.27', 4004)
@@ -164,6 +174,8 @@ def main():
                             s.startGame(name)
                         elif splt2[0] == 'movePlayer':
                             s.movePlayer(name,splt2[1])
+                        elif splt2[0] == 'endTurn':
+                            s.endTurn(name)
                     elif splt[0] == 'message':
                         s.broadcastMessageToAll('%s> %s' % (name, splt[1]))
                 else:

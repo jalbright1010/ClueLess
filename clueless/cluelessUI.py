@@ -184,7 +184,24 @@ class MainWindow(QtGui.QMainWindow):
             self.client.send('function::movePlayer:'+space)
             self.gameboard.players[self.character] = space
             self.gameboard.update()
+            form = QtGui.QFormLayout()
+            button = QtGui.QPushButton('End Turn')
+            button.clicked.connect(self.sendEndTurnMessage)
+            form.addRow(button)
+            for i in reversed(range(self.moveGroup.layout().count())):
+                sip.delete(self.moveGroup.layout().itemAt(i).widget())
+            sip.delete(self.moveGroup.layout())
+            self.moveGroup.setLayout(form)
         return clicked
+
+    def sendEndTurnMessage(self):
+        self.client.send('function::endTurn')
+        form = QtGui.QFormLayout()
+        form.addRow(QtGui.QLabel('Awaiting your next turn....'))
+        for i in reversed(range(self.moveGroup.layout().count())):
+            sip.delete(self.moveGroup.layout().itemAt(i).widget())
+        sip.delete(self.moveGroup.layout())
+        self.moveGroup.setLayout(form)
 
     def sendMessage(self):
         self.client.send('message::'+str(self.inputWindow.text()))

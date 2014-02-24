@@ -279,159 +279,159 @@ class board(QtGui.QWidget):
         self.studyYPos = y1Pos
         self.studyTextXPos = self.studyXPos + self.playerSize/2
         self.studyTextYPos = self.studyXPos + self.playerSize/2
-        self.studyPlayer1xPos = self.studyXPos + self.playerSize/2
-        self.studyPlayer1yPos = self.studyYPos + self.rectSize/2
-        self.studyPlayer2xPos = self.studyXPos + self.rectSize/2
-        self.studyPlayer2yPos = self.studyYPos + self.rectSize/2
-        self.studyPlayer3xPos = self.studyXPos + self.rectSize/2 + self.playerSize
-        self.studyPlayer3yPos = self.studyYPos + self.rectSize/2
-        self.studyPlayer4xPos = self.studyXPos + self.playerSize/2
-        self.studyPlayer4yPos = self.studyYPos + self.rectSize/2 + self.playerSize
-        self.studyPlayer5xPos = self.studyXPos + self.rectSize/2
-        self.studyPlayer5yPos = self.studyYPos + self.rectSize/2 + self.playerSize
-        self.studyPlayer6xPos = self.studyXPos + self.rectSize/2 + self.playerSize
-        self.studyPlayer6yPos = self.studyYPos + self.rectSize/2 + self.playerSize
+        self.studyMustardXPos = self.studyXPos + self.playerSize/2
+        self.studyMustardYPos = self.studyYPos + self.rectSize/2
+        self.studyScarletXPos = self.studyXPos + self.rectSize/2
+        self.studyScarletYPos = self.studyYPos + self.rectSize/2
+        self.studyPlumXPos = self.studyXPos + self.rectSize/2 + self.playerSize
+        self.studyPlumYPos = self.studyYPos + self.rectSize/2
+        self.studyPeacockXPos = self.studyXPos + self.playerSize/2
+        self.studyPeacockYPos = self.studyYPos + self.rectSize/2 + self.playerSize
+        self.studyGreenXPos = self.studyXPos + self.rectSize/2
+        self.studyGreenYPos = self.studyYPos + self.rectSize/2 + self.playerSize
+        self.studyWhiteXPos = self.studyXPos + self.rectSize/2 + self.playerSize
+        self.studyWhiteYPos = self.studyYPos + self.rectSize/2 + self.playerSize
         # Hall Coordinates
         self.hallXPos = x2Pos
         self.hallYPos = y1Pos
         self.hallTextXPos = self.hallXPos + self.playerSize/2
         self.hallTextYPos = self.hallXPos + self.playerSize/2
-        self.hallPlayer1xPos = self.hallXPos + self.playerSize/2
-        self.hallPlayer1yPos = self.hallYPos + self.rectSize/2
-        self.hallPlayer2xPos = self.hallXPos + self.rectSize/2
-        self.hallPlayer2yPos = self.hallYPos + self.rectSize/2
-        self.hallPlayer3xPos = self.hallXPos + self.rectSize/2 + self.playerSize
-        self.hallPlayer3yPos = self.hallYPos + self.rectSize/2
-        self.hallPlayer4xPos = self.hallXPos + self.playerSize/2
-        self.hallPlayer4yPos = self.hallYPos + self.rectSize/2 + self.playerSize
-        self.hallPlayer5xPos = self.hallXPos + self.rectSize/2
-        self.hallPlayer5yPos = self.hallYPos + self.rectSize/2 + self.playerSize
-        self.hallPlayer6xPos = self.hallXPos + self.rectSize/2 + self.playerSize
-        self.hallPlayer6yPos = self.hallYPos + self.rectSize/2 + self.playerSize
+        self.hallMustardXPos = self.hallXPos + self.playerSize/2
+        self.hallMustardYPos = self.hallYPos + self.rectSize/2
+        self.hallScarletXPos = self.hallXPos + self.rectSize/2
+        self.hallScarletYPos = self.hallYPos + self.rectSize/2
+        self.hallPlumXPos = self.hallXPos + self.rectSize/2 + self.playerSize
+        self.hallPlumYPos = self.hallYPos + self.rectSize/2
+        self.hallPeacockXPos = self.hallXPos + self.playerSize/2
+        self.hallPeacockYPos = self.hallYPos + self.rectSize/2 + self.playerSize
+        self.hallGreenXPos = self.hallXPos + self.rectSize/2
+        self.hallGreenYPos = self.hallYPos + self.rectSize/2 + self.playerSize
+        self.hallWhiteXPos = self.hallXPos + self.rectSize/2 + self.playerSize
+        self.hallWhiteYPos = self.hallYPos + self.rectSize/2 + self.playerSize
         # Lounge Coordinates
         self.loungeXPos = x3Pos
         self.loungeYPos = y1Pos
         self.loungeTextXPos = self.loungeXPos + self.playerSize/2
         self.loungeTextYPos = self.loungeXPos + self.playerSize/2
-        self.loungePlayer1xPos = self.loungeXPos + self.playerSize/2
-        self.loungePlayer1yPos = self.loungeYPos + self.rectSize/2
-        self.loungePlayer2xPos = self.loungeXPos + self.rectSize/2
-        self.loungePlayer2yPos = self.loungeYPos + self.rectSize/2
-        self.loungePlayer3xPos = self.loungeXPos + self.rectSize/2 + self.playerSize
-        self.loungePlayer3yPos = self.loungeYPos + self.rectSize/2
-        self.loungePlayer4xPos = self.loungeXPos + self.playerSize/2
-        self.loungePlayer4yPos = self.loungeYPos + self.rectSize/2 + self.playerSize
-        self.loungePlayer5xPos = self.loungeXPos + self.rectSize/2
-        self.loungePlayer5yPos = self.loungeYPos + self.rectSize/2 + self.playerSize
-        self.loungePlayer6xPos = self.loungeXPos + self.rectSize/2 + self.playerSize
-        self.loungePlayer6yPos = self.loungeYPos + self.rectSize/2 + self.playerSize
+        self.loungeMustardXPos = self.loungeXPos + self.playerSize/2
+        self.loungeMustardYPos = self.loungeYPos + self.rectSize/2
+        self.loungeScarletXPos = self.loungeXPos + self.rectSize/2
+        self.loungeScarletYPos = self.loungeYPos + self.rectSize/2
+        self.loungePlumXPos = self.loungeXPos + self.rectSize/2 + self.playerSize
+        self.loungePlumYPos = self.loungeYPos + self.rectSize/2
+        self.loungePeacockXPos = self.loungeXPos + self.playerSize/2
+        self.loungePeacockYPos = self.loungeYPos + self.rectSize/2 + self.playerSize
+        self.loungeGreenXPos = self.loungeXPos + self.rectSize/2
+        self.loungeGreenYPos = self.loungeYPos + self.rectSize/2 + self.playerSize
+        self.loungeWhiteXPos = self.loungeXPos + self.rectSize/2 + self.playerSize
+        self.loungeWhiteYPos = self.loungeYPos + self.rectSize/2 + self.playerSize
         # Library Coordinates
         self.libraryXPos = x1Pos
         self.libraryYPos = y2Pos
         self.libraryTextXPos = self.libraryXPos + self.playerSize/2
         self.libraryTextYPos = self.libraryXPos + self.playerSize/2
-        self.libraryPlayer1xPos = self.libraryXPos + self.playerSize/2
-        self.libraryPlayer1yPos = self.libraryYPos + self.rectSize/2
-        self.libraryPlayer2xPos = self.libraryXPos + self.rectSize/2
-        self.libraryPlayer2yPos = self.libraryYPos + self.rectSize/2
-        self.libraryPlayer3xPos = self.libraryXPos + self.rectSize/2 + self.playerSize
-        self.libraryPlayer3yPos = self.libraryYPos + self.rectSize/2
-        self.libraryPlayer4xPos = self.libraryXPos + self.playerSize/2
-        self.libraryPlayer4yPos = self.libraryYPos + self.rectSize/2 + self.playerSize
-        self.libraryPlayer5xPos = self.libraryXPos + self.rectSize/2
-        self.libraryPlayer5yPos = self.libraryYPos + self.rectSize/2 + self.playerSize
-        self.libraryPlayer6xPos = self.libraryXPos + self.rectSize/2 + self.playerSize
-        self.libraryPlayer6yPos = self.libraryYPos + self.rectSize/2 + self.playerSize
+        self.libraryMustardXPos = self.libraryXPos + self.playerSize/2
+        self.libraryMustardYPos = self.libraryYPos + self.rectSize/2
+        self.libraryScarletXPos = self.libraryXPos + self.rectSize/2
+        self.libraryScarletYPos = self.libraryYPos + self.rectSize/2
+        self.libraryPlumXPos = self.libraryXPos + self.rectSize/2 + self.playerSize
+        self.libraryPlumYPos = self.libraryYPos + self.rectSize/2
+        self.libraryPeacockXPos = self.libraryXPos + self.playerSize/2
+        self.libraryPeacockYPos = self.libraryYPos + self.rectSize/2 + self.playerSize
+        self.libraryGreenXPos = self.libraryXPos + self.rectSize/2
+        self.libraryGreenYPos = self.libraryYPos + self.rectSize/2 + self.playerSize
+        self.libraryWhiteXPos = self.libraryXPos + self.rectSize/2 + self.playerSize
+        self.libraryWhiteYPos = self.libraryYPos + self.rectSize/2 + self.playerSize
         # Billiard Room Coordinates
         self.billiardXPos = x2Pos
         self.billiardYPos = y2Pos
         self.billiardTextXPos = self.billiardXPos + self.playerSize/2
         self.billiardTextYPos = self.billiardXPos + self.playerSize/2
-        self.billiardPlayer1xPos = self.billiardXPos + self.playerSize/2
-        self.billiardPlayer1yPos = self.billiardYPos + self.rectSize/2
-        self.billiardPlayer2xPos = self.billiardXPos + self.rectSize/2
-        self.billiardPlayer2yPos = self.billiardYPos + self.rectSize/2
-        self.billiardPlayer3xPos = self.billiardXPos + self.rectSize/2 + self.playerSize
-        self.billiardPlayer3yPos = self.billiardYPos + self.rectSize/2
-        self.billiardPlayer4xPos = self.billiardXPos + self.playerSize/2
-        self.billiardPlayer4yPos = self.billiardYPos + self.rectSize/2 + self.playerSize
-        self.billiardPlayer5xPos = self.billiardXPos + self.rectSize/2
-        self.billiardPlayer5yPos = self.billiardYPos + self.rectSize/2 + self.playerSize
-        self.billiardPlayer6xPos = self.billiardXPos + self.rectSize/2 + self.playerSize
-        self.billiardPlayer6yPos = self.billiardYPos + self.rectSize/2 + self.playerSize
+        self.billiardMustardXPos = self.billiardXPos + self.playerSize/2
+        self.billiardMustardYPos = self.billiardYPos + self.rectSize/2
+        self.billiardScarletXPos = self.billiardXPos + self.rectSize/2
+        self.billiardScarletYPos = self.billiardYPos + self.rectSize/2
+        self.billiardPlumXPos = self.billiardXPos + self.rectSize/2 + self.playerSize
+        self.billiardPlumYPos = self.billiardYPos + self.rectSize/2
+        self.billiardPeacockXPos = self.billiardXPos + self.playerSize/2
+        self.billiardPeacockYPos = self.billiardYPos + self.rectSize/2 + self.playerSize
+        self.billiardGreenXPos = self.billiardXPos + self.rectSize/2
+        self.billiardGreenYPos = self.billiardYPos + self.rectSize/2 + self.playerSize
+        self.billiardWhiteXPos = self.billiardXPos + self.rectSize/2 + self.playerSize
+        self.billiardWhiteYPos = self.billiardYPos + self.rectSize/2 + self.playerSize
         # Dining Room Coordinates
         self.diningXPos = x3Pos
         self.diningYPos = y2Pos
         self.diningTextXPos = self.diningXPos + self.playerSize/2
         self.diningTextYPos = self.diningXPos + self.playerSize/2
-        self.diningPlayer1xPos = self.diningXPos + self.playerSize/2
-        self.diningPlayer1yPos = self.diningYPos + self.rectSize/2
-        self.diningPlayer2xPos = self.diningXPos + self.rectSize/2
-        self.diningPlayer2yPos = self.diningYPos + self.rectSize/2
-        self.diningPlayer3xPos = self.diningXPos + self.rectSize/2 + self.playerSize
-        self.diningPlayer3yPos = self.diningYPos + self.rectSize/2
-        self.diningPlayer4xPos = self.diningXPos + self.playerSize/2
-        self.diningPlayer4yPos = self.diningYPos + self.rectSize/2 + self.playerSize
-        self.diningPlayer5xPos = self.diningXPos + self.rectSize/2
-        self.diningPlayer5yPos = self.diningYPos + self.rectSize/2 + self.playerSize
-        self.diningPlayer6xPos = self.diningXPos + self.rectSize/2 + self.playerSize
-        self.diningPlayer6yPos = self.diningYPos + self.rectSize/2 + self.playerSize
+        self.diningMustardXPos = self.diningXPos + self.playerSize/2
+        self.diningMustardYPos = self.diningYPos + self.rectSize/2
+        self.diningScarletXPos = self.diningXPos + self.rectSize/2
+        self.diningScarletYPos = self.diningYPos + self.rectSize/2
+        self.diningPlumXPos = self.diningXPos + self.rectSize/2 + self.playerSize
+        self.diningPlumYPos = self.diningYPos + self.rectSize/2
+        self.diningPeacockXPos = self.diningXPos + self.playerSize/2
+        self.diningPeacockYPos = self.diningYPos + self.rectSize/2 + self.playerSize
+        self.diningGreenXPos = self.diningXPos + self.rectSize/2
+        self.diningGreenYPos = self.diningYPos + self.rectSize/2 + self.playerSize
+        self.diningWhiteXPos = self.diningXPos + self.rectSize/2 + self.playerSize
+        self.diningWhiteYPos = self.diningYPos + self.rectSize/2 + self.playerSize
         # Conservatory Coordinates
         self.conservatoryXPos = x1Pos
         self.conservatoryYPos = y3Pos
         self.conservatoryTextXPos = self.conservatoryXPos + self.playerSize/2
         self.conservatoryTextYPos = self.conservatoryXPos + self.playerSize/2
-        self.conservatoryPlayer1xPos = self.conservatoryXPos + self.playerSize/2
-        self.conservatoryPlayer1yPos = self.conservatoryYPos + self.rectSize/2
-        self.conservatoryPlayer2xPos = self.conservatoryXPos + self.rectSize/2
-        self.conservatoryPlayer2yPos = self.conservatoryYPos + self.rectSize/2
-        self.conservatoryPlayer3xPos = self.conservatoryXPos + self.rectSize/2 + self.playerSize
-        self.conservatoryPlayer3yPos = self.conservatoryYPos + self.rectSize/2
-        self.conservatoryPlayer4xPos = self.conservatoryXPos + self.playerSize/2
-        self.conservatoryPlayer4yPos = self.conservatoryYPos + self.rectSize/2 + self.playerSize
-        self.conservatoryPlayer5xPos = self.conservatoryXPos + self.rectSize/2
-        self.conservatoryPlayer5yPos = self.conservatoryYPos + self.rectSize/2 + self.playerSize
-        self.conservatoryPlayer6xPos = self.conservatoryXPos + self.rectSize/2 + self.playerSize
-        self.conservatoryPlayer6yPos = self.conservatoryYPos + self.rectSize/2 + self.playerSize
+        self.conservatoryMustardXPos = self.conservatoryXPos + self.playerSize/2
+        self.conservatoryMustardYPos = self.conservatoryYPos + self.rectSize/2
+        self.conservatoryScarletXPos = self.conservatoryXPos + self.rectSize/2
+        self.conservatoryScarletYPos = self.conservatoryYPos + self.rectSize/2
+        self.conservatoryPlumXPos = self.conservatoryXPos + self.rectSize/2 + self.playerSize
+        self.conservatoryPlumYPos = self.conservatoryYPos + self.rectSize/2
+        self.conservatoryPeacockXPos = self.conservatoryXPos + self.playerSize/2
+        self.conservatoryPeacockYPos = self.conservatoryYPos + self.rectSize/2 + self.playerSize
+        self.conservatoryGreenXPos = self.conservatoryXPos + self.rectSize/2
+        self.conservatoryGreenYPos = self.conservatoryYPos + self.rectSize/2 + self.playerSize
+        self.conservatoryWhiteXPos = self.conservatoryXPos + self.rectSize/2 + self.playerSize
+        self.conservatoryWhiteYPos = self.conservatoryYPos + self.rectSize/2 + self.playerSize
         # Ballroom Coordinates
         self.ballroomXPos = x2Pos
         self.ballroomYPos = y3Pos
         self.ballroomTextXPos = self.ballroomXPos + self.playerSize/2
         self.ballroomTextYPos = self.ballroomXPos + self.playerSize/2
-        self.ballroomPlayer1xPos = self.ballroomXPos + self.playerSize/2
-        self.ballroomPlayer1yPos = self.ballroomYPos + self.rectSize/2
-        self.ballroomPlayer2xPos = self.ballroomXPos + self.rectSize/2
-        self.ballroomPlayer2yPos = self.ballroomYPos + self.rectSize/2
-        self.ballroomPlayer3xPos = self.ballroomXPos + self.rectSize/2 + self.playerSize
-        self.ballroomPlayer3yPos = self.ballroomYPos + self.rectSize/2
-        self.ballroomPlayer4xPos = self.ballroomXPos + self.playerSize/2
-        self.ballroomPlayer4yPos = self.ballroomYPos + self.rectSize/2 + self.playerSize
-        self.ballroomPlayer5xPos = self.ballroomXPos + self.rectSize/2
-        self.ballroomPlayer5yPos = self.ballroomYPos + self.rectSize/2 + self.playerSize
-        self.ballroomPlayer6xPos = self.ballroomXPos + self.rectSize/2 + self.playerSize
-        self.ballroomPlayer6yPos = self.ballroomYPos + self.rectSize/2 + self.playerSize
+        self.ballroomMustardXPos = self.ballroomXPos + self.playerSize/2
+        self.ballroomMustardYPos = self.ballroomYPos + self.rectSize/2
+        self.ballroomScarletXPos = self.ballroomXPos + self.rectSize/2
+        self.ballroomScarletYPos = self.ballroomYPos + self.rectSize/2
+        self.ballroomPlumXPos = self.ballroomXPos + self.rectSize/2 + self.playerSize
+        self.ballroomPlumYPos = self.ballroomYPos + self.rectSize/2
+        self.ballroomPeacockXPos = self.ballroomXPos + self.playerSize/2
+        self.ballroomPeacockYPos = self.ballroomYPos + self.rectSize/2 + self.playerSize
+        self.ballroomGreenXPos = self.ballroomXPos + self.rectSize/2
+        self.ballroomGreenYPos = self.ballroomYPos + self.rectSize/2 + self.playerSize
+        self.ballroomWhiteXPos = self.ballroomXPos + self.rectSize/2 + self.playerSize
+        self.ballroomWhiteYPos = self.ballroomYPos + self.rectSize/2 + self.playerSize
         # Kitchen Coordinates
         self.kitchenXPos = x3Pos
         self.kitchenYPos = y3Pos
         self.kitchenTextXPos = self.kitchenXPos + self.playerSize/2
         self.kitchenTextYPos = self.kitchenXPos + self.playerSize/2
-        self.kitchenPlayer1xPos = self.libraryXPos + self.playerSize/2
-        self.kitchenPlayer1yPos = self.libraryYPos + self.rectSize/2
-        self.kitchenPlayer2xPos = self.libraryXPos + self.rectSize/2
-        self.kitchenPlayer2yPos = self.libraryYPos + self.rectSize/2
-        self.kitchenPlayer3xPos = self.libraryXPos + self.rectSize/2 + self.playerSize
-        self.kitchenPlayer3yPos = self.libraryYPos + self.rectSize/2
-        self.kitchenPlayer4xPos = self.libraryXPos + self.playerSize/2
-        self.kitchenPlayer4yPos = self.libraryYPos + self.rectSize/2 + self.playerSize
-        self.kitchenPlayer5xPos = self.libraryXPos + self.rectSize/2
-        self.kitchenPlayer5yPos = self.libraryYPos + self.rectSize/2 + self.playerSize
-        self.kitchenPlayer6xPos = self.libraryXPos + self.rectSize/2 + self.playerSize
-        self.kitchenPlayer6yPos = self.libraryYPos + self.rectSize/2 + self.playerSize
+        self.kitchenMustardXPos = self.kitchenXPos + self.playerSize/2
+        self.kitchenMustardYPos = self.kitchenYPos + self.rectSize/2
+        self.kitchenScarletXPos = self.kitchenXPos + self.rectSize/2
+        self.kitchenScarletYPos = self.kitchenYPos + self.rectSize/2
+        self.kitchenPlumXPos = self.kitchenXPos + self.rectSize/2 + self.playerSize
+        self.kitchenPlumYPos = self.kitchenYPos + self.rectSize/2
+        self.kitchenPeacockXPos = self.kitchenXPos + self.playerSize/2
+        self.kitchenPeacockYPos = self.kitchenYPos + self.rectSize/2 + self.playerSize
+        self.kitchenGreenXPos = self.kitchenXPos + self.rectSize/2
+        self.kitchenGreenYPos = self.kitchenYPos + self.rectSize/2 + self.playerSize
+        self.kitchenWhiteXPos = self.kitchenXPos + self.rectSize/2 + self.playerSize
+        self.kitchenWhiteYPos = self.kitchenYPos + self.rectSize/2 + self.playerSize
         # StudyHall Coordinates
         self.shXPos = hallx1Pos
         self.shYPos = hally1Pos
-        self.shPlayerxPos = self.shXPos + self.hallLength/2
-        self.shPlayeryPos = self.shYPos + self.playerSize/2
+        self.shPlayerXPos = self.shXPos + self.hallLength/2
+        self.shPlayerYPos = self.shYPos + self.playerSize/2
         # HallLounge Coordinates
         self.hlXPos = hallx2Pos
         self.hlYPos = hally1Pos
@@ -489,7 +489,7 @@ class board(QtGui.QWidget):
         self.bkPlayerYPos = self.bkYPos + self.playerSize/2
         # Colonel Mustard settings
         self.cmHomeXPos = x3Pos+self.rectSize+self.hallWidth+self.playerSize/2
-        self.cmHomeYPos = hally4Pos+self.hallHeight/2
+        self.cmHomeYPos = hally2Pos+self.hallHeight/2
         self.cmColor = QtGui.QColor(204,204,0)
         # Miss Scarlet settings
         self.msHomeXPos = x2Pos+self.rectSize+self.hallLength/2
@@ -618,67 +618,67 @@ class board(QtGui.QWidget):
                     center = QtCore.QPoint(self.cmHomeXPos,self.cmHomeYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'StudyHall':
-                    center = QtCore.QPoint(self.shXPos,self.shYPos)
+                    center = QtCore.QPoint(self.shPlayerXPos,self.shPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'HallLounge':
-                    center = QtCore.QPoint(self.hlXPos,self.hlYPos)
+                    center = QtCore.QPoint(self.hlPlayerXPos,self.hlPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'StudyLibrary':
-                    center = QtCore.QPoint(self.slXPos,self.slYPos)
+                    center = QtCore.QPoint(self.slPlayerXPos,self.slPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'HallBilliardRoom':
-                    center = QtCore.QPoint(self.hbXPos,self.hbYPos)
+                    center = QtCore.QPoint(self.hbPlayerXPos,self.hbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LoungeDiningRoom':
-                    center = QtCore.QPoint(self.ldXPos,self.ldYPos)
+                    center = QtCore.QPoint(self.ldPlayerXPos,self.ldPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LibraryBilliardRoom':
-                    center = QtCore.QPoint(self.lbXPos,self.lbYPos)
+                    center = QtCore.QPoint(self.lbPlayerXPos,self.lbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BilliardRoomDiningRoom':
-                    center = QtCore.QPoint(self.bdXPos,self.bdYPos)
+                    center = QtCore.QPoint(self.bdPlayerXPos,self.bdPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LibraryConservatory':
-                    center = QtCore.QPoint(self.lcXPos,self.lcYPos)
+                    center = QtCore.QPoint(self.lcPlayerXPos,self.lcPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BilliardRoomBallroom':
-                    center = QtCore.QPoint(self.bbXPos,self.bbYPos)
+                    center = QtCore.QPoint(self.bbPlayerXPos,self.bbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'DiningRoomKitchen':
-                    center = QtCore.QPoint(self.dkXPos,self.dkYPos)
+                    center = QtCore.QPoint(self.dkPlayerXPos,self.dkPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'ConservatoryBallroom':
-                    center = QtCore.QPoint(self.cbXPos,self.cbYPos)
+                    center = QtCore.QPoint(self.cbPlayerXPos,self.cbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BallroomKitchen':
-                    center = QtCore.QPoint(self.bkXPos,self.bkYPos)
+                    center = QtCore.QPoint(self.bkPlayerXPos,self.bkPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Study':
-                    center = QtCore.QPoint(self.studyPlayer1xPos,self.studyPlayer1yPos)
+                    center = QtCore.QPoint(self.studyMustardXPos,self.studyMustardYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Hall':
-                    center = QtCore.QPoint(self.hallPlayer1xPos,self.hallPlayer1yPos)
-                    qp.drawEllipse(center, playerSize, playerSize)
+                    center = QtCore.QPoint(self.hallMustardXPos,self.hallMustardYPos)
+                    qp.drawEllipse(center, self.playerSize, self.playerSize)
                 elif location == 'Lounge':
-                    center = QtCore.QPoint(self.loungePlayer1xPos,self.loungePlayer1yPos)
+                    center = QtCore.QPoint(self.loungeMustardXPos,self.loungeMustardYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Library':
-                    center = QtCore.QPoint(self.libraryPlayer1xPos,self.libraryPlayer1yPos)
+                    center = QtCore.QPoint(self.libraryMustardXPos,self.libraryMustardYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
-                elif location == 'BilliardRoom':
-                    center = QtCore.QPoint(self.billiardPlayer1xPos,self.billiardPlayer1yPos)
+                elif location == 'Billiard Room':
+                    center = QtCore.QPoint(self.billiardMustardXPos,self.billiardMustardYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
-                elif location == 'DiningRoom':
-                    center = QtCore.QPoint(self.diningPlayer1xPos,self.diningPlayer1yPos)
+                elif location == 'Dining Room':
+                    center = QtCore.QPoint(self.diningMustardXPos,self.diningMustardYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Conservatory':
-                    center = QtCore.QPoint(self.conservatoryPlayer1xPos,self.conservatoryPlayer1yPos)
+                    center = QtCore.QPoint(self.conservatoryMustardXPos,self.conservatoryMustardYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Ballroom':
-                    center = QtCore.QPoint(self.ballroomPlayer1xPos,self.ballroomPlayer1yPos)
+                    center = QtCore.QPoint(self.ballroomMustardXPos,self.ballroomMustardYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Kitchen':
-                    center = QtCore.QPoint(self.kitchenPlayer1xPos,self.kitchenPlayer1yPos)
+                    center = QtCore.QPoint(self.kitchenMustardXPos,self.kitchenMustardYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
             elif player == 'Miss Scarlet':
                 qp.setBrush(self.msColor)
@@ -686,135 +686,135 @@ class board(QtGui.QWidget):
                     center = QtCore.QPoint(self.msHomeXPos,self.msHomeYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'StudyHall':
-                    center = QtCore.QPoint(self.shXPos,self.shYPos)
+                    center = QtCore.QPoint(self.shPlayerXPos,self.shPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'HallLounge':
-                    center = QtCore.QPoint(self.hlXPos,self.hlYPos)
+                    center = QtCore.QPoint(self.hlPlayerXPos,self.hlPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'StudyLibrary':
-                    center = QtCore.QPoint(self.slXPos,self.slYPos)
+                    center = QtCore.QPoint(self.slPlayerXPos,self.slPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'HallBilliardRoom':
-                    center = QtCore.QPoint(self.hbXPos,self.hbYPos)
+                    center = QtCore.QPoint(self.hbPlayerXPos,self.hbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LoungeDiningRoom':
-                    center = QtCore.QPoint(self.ldXPos,self.ldYPos)
+                    center = QtCore.QPoint(self.ldPlayerXPos,self.ldPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LibraryBilliardRoom':
-                    center = QtCore.QPoint(self.lbXPos,self.lbYPos)
+                    center = QtCore.QPoint(self.lbPlayerXPos,self.lbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BilliardRoomDiningRoom':
-                    center = QtCore.QPoint(self.bdXPos,self.bdYPos)
+                    center = QtCore.QPoint(self.bdPlayerXPos,self.bdPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LibraryConservatory':
-                    center = QtCore.QPoint(self.lcXPos,self.lcYPos)
+                    center = QtCore.QPoint(self.lcPlayerXPos,self.lcPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BilliardRoomBallroom':
-                    center = QtCore.QPoint(self.bbXPos,self.bbYPos)
+                    center = QtCore.QPoint(self.bbPlayerXPos,self.bbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'DiningRoomKitchen':
-                    center = QtCore.QPoint(self.dkXPos,self.dkYPos)
+                    center = QtCore.QPoint(self.dkPlayerXPos,self.dkPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'ConservatoryBallroom':
-                    center = QtCore.QPoint(self.cbXPos,self.cbYPos)
+                    center = QtCore.QPoint(self.cbPlayerXPos,self.cbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BallroomKitchen':
-                    center = QtCore.QPoint(self.bkXPos,self.bkYPos)
+                    center = QtCore.QPoint(self.bkPlayerXPos,self.bkPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Study':
-                    center = QtCore.QPoint(self.studyPlayer1xPos,self.studyPlayer1yPos)
+                    center = QtCore.QPoint(self.studyScarletXPos,self.studyScarletYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Hall':
-                    center = QtCore.QPoint(self.hallPlayer1xPos,self.hallPlayer1yPos)
-                    qp.drawEllipse(center, playerSize, playerSize)
+                    center = QtCore.QPoint(self.hallScarletXPos,self.hallScarletYPos)
+                    qp.drawEllipse(center, self.playerSize, self.playerSize)
                 elif location == 'Lounge':
-                    center = QtCore.QPoint(self.loungePlayer1xPos,self.loungePlayer1yPos)
+                    center = QtCore.QPoint(self.loungeScarletXPos,self.loungeScarletYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Library':
-                    center = QtCore.QPoint(self.libraryPlayer1xPos,self.libraryPlayer1yPos)
+                    center = QtCore.QPoint(self.libraryScarletXPos,self.libraryScarletYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
-                elif location == 'BilliardRoom':
-                    center = QtCore.QPoint(self.billiardPlayer1xPos,self.billiardPlayer1yPos)
+                elif location == 'Billiard Room':
+                    center = QtCore.QPoint(self.billiardScarletXPos,self.billiardScarletYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
-                elif location == 'DiningRoom':
-                    center = QtCore.QPoint(self.diningPlayer1xPos,self.diningPlayer1yPos)
+                elif location == 'Dining Room':
+                    center = QtCore.QPoint(self.diningScarletXPos,self.diningScarletYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Conservatory':
-                    center = QtCore.QPoint(self.conservatoryPlayer1xPos,self.conservatoryPlayer1yPos)
+                    center = QtCore.QPoint(self.conservatoryScarletXPos,self.conservatoryScarletYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Ballroom':
-                    center = QtCore.QPoint(self.ballroomPlayer1xPos,self.ballroomPlayer1yPos)
+                    center = QtCore.QPoint(self.ballroomScarletXPos,self.ballroomScarletYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Kitchen':
-                    center = QtCore.QPoint(self.kitchenPlayer1xPos,self.kitchenPlayer1yPos)
+                    center = QtCore.QPoint(self.kitchenScarletXPos,self.kitchenScarletYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
             elif player == 'Professor Plum':
                 qp.setBrush(self.ppColor)
                 if location == 'Professor PlumHome':
-                    center = QtCore.QPoint(self.ppHomeXPos,self.msHomeYPos)
+                    center = QtCore.QPoint(self.ppHomeXPos,self.ppHomeYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'StudyHall':
-                    center = QtCore.QPoint(self.shXPos,self.shYPos)
+                    center = QtCore.QPoint(self.shPlayerXPos,self.shPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'HallLounge':
-                    center = QtCore.QPoint(self.hlXPos,self.hlYPos)
+                    center = QtCore.QPoint(self.hlPlayerXPos,self.hlPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'StudyLibrary':
-                    center = QtCore.QPoint(self.slXPos,self.slYPos)
+                    center = QtCore.QPoint(self.slPlayerXPos,self.slPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'HallBilliardRoom':
-                    center = QtCore.QPoint(self.hbXPos,self.hbYPos)
+                    center = QtCore.QPoint(self.hbPlayerXPos,self.hbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LoungeDiningRoom':
-                    center = QtCore.QPoint(self.ldXPos,self.ldYPos)
+                    center = QtCore.QPoint(self.ldPlayerXPos,self.ldPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LibraryBilliardRoom':
-                    center = QtCore.QPoint(self.lbXPos,self.lbYPos)
+                    center = QtCore.QPoint(self.lbPlayerXPos,self.lbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BilliardRoomDiningRoom':
-                    center = QtCore.QPoint(self.bdXPos,self.bdYPos)
+                    center = QtCore.QPoint(self.bdPlayerXPos,self.bdPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LibraryConservatory':
-                    center = QtCore.QPoint(self.lcXPos,self.lcYPos)
+                    center = QtCore.QPoint(self.lcPlayerXPos,self.lcPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BilliardRoomBallroom':
-                    center = QtCore.QPoint(self.bbXPos,self.bbYPos)
+                    center = QtCore.QPoint(self.bbPlayerXPos,self.bbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'DiningRoomKitchen':
-                    center = QtCore.QPoint(self.dkXPos,self.dkYPos)
+                    center = QtCore.QPoint(self.dkPlayerXPos,self.dkPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'ConservatoryBallroom':
-                    center = QtCore.QPoint(self.cbXPos,self.cbYPos)
+                    center = QtCore.QPoint(self.cbPlayerXPos,self.cbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BallroomKitchen':
-                    center = QtCore.QPoint(self.bkXPos,self.bkYPos)
+                    center = QtCore.QPoint(self.bkPlayerXPos,self.bkPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Study':
-                    center = QtCore.QPoint(self.studyPlayer1xPos,self.studyPlayer1yPos)
+                    center = QtCore.QPoint(self.studyPlumXPos,self.studyPlumYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Hall':
-                    center = QtCore.QPoint(self.hallPlayer1xPos,self.hallPlayer1yPos)
-                    qp.drawEllipse(center, playerSize, playerSize)
+                    center = QtCore.QPoint(self.hallPlumXPos,self.hallPlumYPos)
+                    qp.drawEllipse(center, self.playerSize, self.playerSize)
                 elif location == 'Lounge':
-                    center = QtCore.QPoint(self.loungePlayer1xPos,self.loungePlayer1yPos)
+                    center = QtCore.QPoint(self.loungePlumXPos,self.loungePlumYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Library':
-                    center = QtCore.QPoint(self.libraryPlayer1xPos,self.libraryPlayer1yPos)
+                    center = QtCore.QPoint(self.libraryPlumXPos,self.libraryPlumYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
-                elif location == 'BilliardRoom':
-                    center = QtCore.QPoint(self.billiardPlayer1xPos,self.billiardPlayer1yPos)
+                elif location == 'Billiard Room':
+                    center = QtCore.QPoint(self.billiardPlumXPos,self.billiardPlumYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
-                elif location == 'DiningRoom':
-                    center = QtCore.QPoint(self.diningPlayer1xPos,self.diningPlayer1yPos)
+                elif location == 'Dining Room':
+                    center = QtCore.QPoint(self.diningPlumXPos,self.diningPlumYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Conservatory':
-                    center = QtCore.QPoint(self.conservatoryPlayer1xPos,self.conservatoryPlayer1yPos)
+                    center = QtCore.QPoint(self.conservatoryPlumXPos,self.conservatoryPlumYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Ballroom':
-                    center = QtCore.QPoint(self.ballroomPlayer1xPos,self.ballroomPlayer1yPos)
+                    center = QtCore.QPoint(self.ballroomPlumXPos,self.ballroomPlumYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Kitchen':
-                    center = QtCore.QPoint(self.kitchenPlayer1xPos,self.kitchenPlayer1yPos)
+                    center = QtCore.QPoint(self.kitchenPlumXPos,self.kitchenPlumYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
             elif player == 'Mrs. Peacock':
                 qp.setBrush(self.mpColor)
@@ -822,67 +822,67 @@ class board(QtGui.QWidget):
                     center = QtCore.QPoint(self.mpHomeXPos,self.mpHomeYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'StudyHall':
-                    center = QtCore.QPoint(self.shXPos,self.shYPos)
+                    center = QtCore.QPoint(self.shPlayerXPos,self.shPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'HallLounge':
-                    center = QtCore.QPoint(self.hlXPos,self.hlYPos)
+                    center = QtCore.QPoint(self.hlPlayerXPos,self.hlPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'StudyLibrary':
-                    center = QtCore.QPoint(self.slXPos,self.slYPos)
+                    center = QtCore.QPoint(self.slPlayerXPos,self.slPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'HallBilliardRoom':
-                    center = QtCore.QPoint(self.hbXPos,self.hbYPos)
+                    center = QtCore.QPoint(self.hbPlayerXPos,self.hbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LoungeDiningRoom':
-                    center = QtCore.QPoint(self.ldXPos,self.ldYPos)
+                    center = QtCore.QPoint(self.ldPlayerXPos,self.ldPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LibraryBilliardRoom':
-                    center = QtCore.QPoint(self.lbXPos,self.lbYPos)
+                    center = QtCore.QPoint(self.lbPlayerXPos,self.lbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BilliardRoomDiningRoom':
-                    center = QtCore.QPoint(self.bdXPos,self.bdYPos)
+                    center = QtCore.QPoint(self.bdPlayerXPos,self.bdPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LibraryConservatory':
-                    center = QtCore.QPoint(self.lcXPos,self.lcYPos)
+                    center = QtCore.QPoint(self.lcPlayerXPos,self.lcPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BilliardRoomBallroom':
-                    center = QtCore.QPoint(self.bbXPos,self.bbYPos)
+                    center = QtCore.QPoint(self.bbPlayerXPos,self.bbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'DiningRoomKitchen':
-                    center = QtCore.QPoint(self.dkXPos,self.dkYPos)
+                    center = QtCore.QPoint(self.dkPlayerXPos,self.dkPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'ConservatoryBallroom':
-                    center = QtCore.QPoint(self.cbXPos,self.cbYPos)
+                    center = QtCore.QPoint(self.cbPlayerXPos,self.cbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BallroomKitchen':
-                    center = QtCore.QPoint(self.bkXPos,self.bkYPos)
+                    center = QtCore.QPoint(self.bkPlayerXPos,self.bkPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Study':
-                    center = QtCore.QPoint(self.studyPlayer1xPos,self.studyPlayer1yPos)
+                    center = QtCore.QPoint(self.studyPeacockXPos,self.studyPeacockYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Hall':
-                    center = QtCore.QPoint(self.hallPlayer1xPos,self.hallPlayer1yPos)
-                    qp.drawEllipse(center, playerSize, playerSize)
+                    center = QtCore.QPoint(self.hallPeacockXPos,self.hallPeacockYPos)
+                    qp.drawEllipse(center, self.playerSize, self.playerSize)
                 elif location == 'Lounge':
-                    center = QtCore.QPoint(self.loungePlayer1xPos,self.loungePlayer1yPos)
+                    center = QtCore.QPoint(self.loungePeacockXPos,self.loungePeacockYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Library':
-                    center = QtCore.QPoint(self.libraryPlayer1xPos,self.libraryPlayer1yPos)
+                    center = QtCore.QPoint(self.libraryPeacockXPos,self.libraryPeacockYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
-                elif location == 'BilliardRoom':
-                    center = QtCore.QPoint(self.billiardPlayer1xPos,self.billiardPlayer1yPos)
+                elif location == 'Billiard Room':
+                    center = QtCore.QPoint(self.billiardPeacockXPos,self.billiardPeacockYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
-                elif location == 'DiningRoom':
-                    center = QtCore.QPoint(self.diningPlayer1xPos,self.diningPlayer1yPos)
+                elif location == 'Dining Room':
+                    center = QtCore.QPoint(self.diningPeacockXPos,self.diningPeacockYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Conservatory':
-                    center = QtCore.QPoint(self.conservatoryPlayer1xPos,self.conservatoryPlayer1yPos)
+                    center = QtCore.QPoint(self.conservatoryPeacockXPos,self.conservatoryPeacockYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Ballroom':
-                    center = QtCore.QPoint(self.ballroomPlayer1xPos,self.ballroomPlayer1yPos)
+                    center = QtCore.QPoint(self.ballroomPeacockXPos,self.ballroomPeacockYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Kitchen':
-                    center = QtCore.QPoint(self.kitchenPlayer1xPos,self.kitchenPlayer1yPos)
+                    center = QtCore.QPoint(self.kitchenPeacockXPos,self.kitchenPeacockYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
             elif player == 'Mr. Green':
                 qp.setBrush(self.mgColor)
@@ -890,67 +890,67 @@ class board(QtGui.QWidget):
                     center = QtCore.QPoint(self.mgHomeXPos,self.mgHomeYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'StudyHall':
-                    center = QtCore.QPoint(self.shXPos,self.shYPos)
+                    center = QtCore.QPoint(self.shPlayerXPos,self.shPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'HallLounge':
-                    center = QtCore.QPoint(self.hlXPos,self.hlYPos)
+                    center = QtCore.QPoint(self.hlPlayerXPos,self.hlPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'StudyLibrary':
-                    center = QtCore.QPoint(self.slXPos,self.slYPos)
+                    center = QtCore.QPoint(self.slPlayerXPos,self.slPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'HallBilliardRoom':
-                    center = QtCore.QPoint(self.hbXPos,self.hbYPos)
+                    center = QtCore.QPoint(self.hbPlayerXPos,self.hbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LoungeDiningRoom':
-                    center = QtCore.QPoint(self.ldXPos,self.ldYPos)
+                    center = QtCore.QPoint(self.ldPlayerXPos,self.ldPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LibraryBilliardRoom':
-                    center = QtCore.QPoint(self.lbXPos,self.lbYPos)
+                    center = QtCore.QPoint(self.lbPlayerXPos,self.lbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BilliardRoomDiningRoom':
-                    center = QtCore.QPoint(self.bdXPos,self.bdYPos)
+                    center = QtCore.QPoint(self.bdPlayerXPos,self.bdPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LibraryConservatory':
-                    center = QtCore.QPoint(self.lcXPos,self.lcYPos)
+                    center = QtCore.QPoint(self.lcPlayerXPos,self.lcPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BilliardRoomBallroom':
-                    center = QtCore.QPoint(self.bbXPos,self.bbYPos)
+                    center = QtCore.QPoint(self.bbPlayerXPos,self.bbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'DiningRoomKitchen':
-                    center = QtCore.QPoint(self.dkXPos,self.dkYPos)
+                    center = QtCore.QPoint(self.dkPlayerXPos,self.dkPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'ConservatoryBallroom':
-                    center = QtCore.QPoint(self.cbXPos,self.cbYPos)
+                    center = QtCore.QPoint(self.cbPlayerXPos,self.cbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BallroomKitchen':
-                    center = QtCore.QPoint(self.bkXPos,self.bkYPos)
+                    center = QtCore.QPoint(self.bkPlayerXPos,self.bkPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Study':
-                    center = QtCore.QPoint(self.studyPlayer1xPos,self.studyPlayer1yPos)
+                    center = QtCore.QPoint(self.studyGreenXPos,self.studyGreenYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Hall':
-                    center = QtCore.QPoint(self.hallPlayer1xPos,self.hallPlayer1yPos)
-                    qp.drawEllipse(center, playerSize, playerSize)
+                    center = QtCore.QPoint(self.hallGreenXPos,self.hallGreenYPos)
+                    qp.drawEllipse(center, self.playerSize, self.playerSize)
                 elif location == 'Lounge':
-                    center = QtCore.QPoint(self.loungePlayer1xPos,self.loungePlayer1yPos)
+                    center = QtCore.QPoint(self.loungeGreenXPos,self.loungeGreenYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Library':
-                    center = QtCore.QPoint(self.libraryPlayer1xPos,self.libraryPlayer1yPos)
+                    center = QtCore.QPoint(self.libraryGreenXPos,self.libraryGreenYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
-                elif location == 'BilliardRoom':
-                    center = QtCore.QPoint(self.billiardPlayer1xPos,self.billiardPlayer1yPos)
+                elif location == 'Billiard Room':
+                    center = QtCore.QPoint(self.billiardGreenXPos,self.billiardGreenYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
-                elif location == 'DiningRoom':
-                    center = QtCore.QPoint(self.diningPlayer1xPos,self.diningPlayer1yPos)
+                elif location == 'Dining Room':
+                    center = QtCore.QPoint(self.diningGreenXPos,self.diningGreenYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Conservatory':
-                    center = QtCore.QPoint(self.conservatoryPlayer1xPos,self.conservatoryPlayer1yPos)
+                    center = QtCore.QPoint(self.conservatoryGreenXPos,self.conservatoryGreenYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Ballroom':
-                    center = QtCore.QPoint(self.ballroomPlayer1xPos,self.ballroomPlayer1yPos)
+                    center = QtCore.QPoint(self.ballroomGreenXPos,self.ballroomGreenYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Kitchen':
-                    center = QtCore.QPoint(self.kitchenPlayer1xPos,self.kitchenPlayer1yPos)
+                    center = QtCore.QPoint(self.kitchenGreenXPos,self.kitchenGreenYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
             elif player == 'Mrs. White':
                 qp.setBrush(self.mwColor)
@@ -958,67 +958,67 @@ class board(QtGui.QWidget):
                     center = QtCore.QPoint(self.mwHomeXPos,self.mwHomeYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'StudyHall':
-                    center = QtCore.QPoint(self.shXPos,self.shYPos)
+                    center = QtCore.QPoint(self.shPlayerXPos,self.shPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'HallLounge':
-                    center = QtCore.QPoint(self.hlXPos,self.hlYPos)
+                    center = QtCore.QPoint(self.hlPlayerXPos,self.hlPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'StudyLibrary':
-                    center = QtCore.QPoint(self.slXPos,self.slYPos)
+                    center = QtCore.QPoint(self.slPlayerXPos,self.slPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'HallBilliardRoom':
-                    center = QtCore.QPoint(self.hbXPos,self.hbYPos)
+                    center = QtCore.QPoint(self.hbPlayerXPos,self.hbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LoungeDiningRoom':
-                    center = QtCore.QPoint(self.ldXPos,self.ldYPos)
+                    center = QtCore.QPoint(self.ldPlayerXPos,self.ldPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LibraryBilliardRoom':
-                    center = QtCore.QPoint(self.lbXPos,self.lbYPos)
+                    center = QtCore.QPoint(self.lbPlayerXPos,self.lbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BilliardRoomDiningRoom':
-                    center = QtCore.QPoint(self.bdXPos,self.bdYPos)
+                    center = QtCore.QPoint(self.bdPlayerXPos,self.bdPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'LibraryConservatory':
-                    center = QtCore.QPoint(self.lcXPos,self.lcYPos)
+                    center = QtCore.QPoint(self.lcPlayerXPos,self.lcPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BilliardRoomBallroom':
-                    center = QtCore.QPoint(self.bbXPos,self.bbYPos)
+                    center = QtCore.QPoint(self.bbPlayerXPos,self.bbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'DiningRoomKitchen':
-                    center = QtCore.QPoint(self.dkXPos,self.dkYPos)
+                    center = QtCore.QPoint(self.dkPlayerXPos,self.dkPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'ConservatoryBallroom':
-                    center = QtCore.QPoint(self.cbXPos,self.cbYPos)
+                    center = QtCore.QPoint(self.cbPlayerXPos,self.cbPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'BallroomKitchen':
-                    center = QtCore.QPoint(self.bkXPos,self.bkYPos)
+                    center = QtCore.QPoint(self.bkPlayerXPos,self.bkPlayerYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Study':
-                    center = QtCore.QPoint(self.studyPlayer1xPos,self.studyPlayer1yPos)
+                    center = QtCore.QPoint(self.studyWhiteXPos,self.studyWhiteYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Hall':
-                    center = QtCore.QPoint(self.hallPlayer1xPos,self.hallPlayer1yPos)
-                    qp.drawEllipse(center, playerSize, playerSize)
+                    center = QtCore.QPoint(self.hallWhiteXPos,self.hallWhiteYPos)
+                    qp.drawEllipse(center, self.playerSize, self.playerSize)
                 elif location == 'Lounge':
-                    center = QtCore.QPoint(self.loungePlayer1xPos,self.loungePlayer1yPos)
+                    center = QtCore.QPoint(self.loungeWhiteXPos,self.loungeWhiteYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Library':
-                    center = QtCore.QPoint(self.libraryPlayer1xPos,self.libraryPlayer1yPos)
+                    center = QtCore.QPoint(self.libraryWhiteXPos,self.libraryWhiteYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
-                elif location == 'BilliardRoom':
-                    center = QtCore.QPoint(self.billiardPlayer1xPos,self.billiardPlayer1yPos)
+                elif location == 'Billiard Room':
+                    center = QtCore.QPoint(self.billiardWhiteXPos,self.billiardWhiteYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
-                elif location == 'DiningRoom':
-                    center = QtCore.QPoint(self.diningPlayer1xPos,self.diningPlayer1yPos)
+                elif location == 'Dining Room':
+                    center = QtCore.QPoint(self.diningWhiteXPos,self.diningWhiteYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Conservatory':
-                    center = QtCore.QPoint(self.conservatoryPlayer1xPos,self.conservatoryPlayer1yPos)
+                    center = QtCore.QPoint(self.conservatoryWhiteXPos,self.conservatoryWhiteYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Ballroom':
-                    center = QtCore.QPoint(self.ballroomPlayer1xPos,self.ballroomPlayer1yPos)
+                    center = QtCore.QPoint(self.ballroomWhiteXPos,self.ballroomWhiteYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                 elif location == 'Kitchen':
-                    center = QtCore.QPoint(self.kitchenPlayer1xPos,self.kitchenPlayer1yPos)
+                    center = QtCore.QPoint(self.kitchenWhiteXPos,self.kitchenWhiteYPos)
                     qp.drawEllipse(center,self.playerSize,self.playerSize)
                         
         qp.end()
