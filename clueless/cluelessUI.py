@@ -18,11 +18,11 @@ class MainWindow(QtGui.QMainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        #host = '98.218.228.27'
+        host = '98.218.228.27'
         #host = '127.0.0.1'
-        host = '192.168.41.27'
-        #port = 40004
-        port = 4004
+        #host = '192.168.41.27'
+        port = 40004
+        #port = 4004
         self.connectToServer(host, port)
         self.receiveSignal.connect(self.appendMessage)
         self.usernameSignal.connect(self.askForUsername)
@@ -53,10 +53,10 @@ class MainWindow(QtGui.QMainWindow):
     def sendUsername(self):
     	self.client.send(str(self.getUsername.edit.text()))
     	self.getUsername.close()
-    	self.inputWindow.setReadOnly(False)
 
     @QtCore.pyqtSlot(str)
     def createCharacterPicker(self, used):
+        self.inputWindow.setReadOnly(True)
         self.getCharacter = QtGui.QWidget()
         self.getCharacter.resize(250,250)
         self.getCharacter.move(self.width()/2-62, self.height()/2-62)
@@ -78,17 +78,14 @@ class MainWindow(QtGui.QMainWindow):
     def chooseCharacter(self):
         character = str(self.getCharacter.charList.currentItem().text())
         self.client.send('function::joinGame:'+character)
+        self.character = character
         self.getCharacter.close()
+        self.inputWindow.setReadOnly(False)
 
     @QtCore.pyqtSlot(str)
     def drawCharacter(self, pickled):
         self.gameboard.players = pickle.loads(str(pickled))
-        self.gameboard.drawingPlayer = True
         self.gameboard.update()
-
-    @QtCore.pyqtSlot()
-    def gameStart(self):
-        pass
 
     def connectToServer(self, host, port):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -168,14 +165,13 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.pyqtSlot(str)
     def createMoves(self, pickled):
-        print pickled
         moves = pickle.loads(str(pickled))
         form = QtGui.QFormLayout()
         
-        for move in moves:
-            label = QtGui.QLabel('Move to %s...' % move)
+        for space in moves:
+            label = QtGui.QLabel('Move to %s...' % space)
             button = QtGui.QPushButton('Move')
-            button.clicked.connect(self.buttonClicked(move))
+            button.clicked.connect(self.buttonClicked(space))
             form.addRow(label,button)
 
         for i in reversed(range(self.moveGroup.layout().count())):
@@ -183,9 +179,11 @@ class MainWindow(QtGui.QMainWindow):
         sip.delete(self.moveGroup.layout())
         self.moveGroup.setLayout(form)
 
-    def buttonClicked(self, move):
+    def buttonClicked(self, space):
         def clicked():
-            self.client.send('function::movePlayer:'+move)
+            self.client.send('function::movePlayer:'+space)
+            self.gameboard.players[self.character] = space
+            self.gameboard.update()
         return clicked
 
     def sendMessage(self):

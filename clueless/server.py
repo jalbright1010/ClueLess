@@ -6,6 +6,7 @@ import time
 import sys
 import cPickle as pickle
 import uuid
+import itertools
 import gameplay 
 
 class server():
@@ -47,7 +48,7 @@ class server():
                     self.users[name] = conn
                     self.broadcastMessageToAll('+++ %s arrived +++' % name)
                     time.sleep(.1)
-                    conn.send('usedChars:'+pickle.dumps([x.character for x in self.game.players]))
+                    conn.send('usedChars:'+pickle.dumps([x.character for x in self.game.players.values()]))
                     break
         self.acceptThread = thread.start_new_thread(threaded, ())
 
@@ -69,15 +70,14 @@ class server():
 
     def createNewGame(self):
         self.game = gameplay.game()
-        #self.availableGames.append(g)
-        self.broadcastMessageToAll('Game created with id '+self.game.id)
+        self.broadcastMessageToAll('Game created with id %s' % self.game.id)
         
     def joinGame(self, name, char):
         if self.game:
             if len(self.game.players) < 6:
-                if char in [x.character for x in self.game.players]:
+                if char in [x.character for x in self.game.players.values()]:
                     try:
-                        self.users[name].send('usedChars:'+pickle.dumps([x.character for x in self.game.players]))
+                        self.users[name].send('usedChars:'+pickle.dumps([x.character for x in self.game.players.values()]))
                     except:
                         pass
                 else:
@@ -86,7 +86,11 @@ class server():
                     time.sleep(.1)
                     for name, conn in self.users.items():
                         try:
-                            conn.send('characterAdded:'+pickle.dumps([x.character for x in self.game.players]))
+                            conn.send('characterAdded:'+pickle.dumps({x:y for x,y in
+                                                                      itertools.izip([x.character 
+                                                                                      for x in self.game.players.values()],
+                                                                                     [x.currentSpace.identifier 
+                                                                                      for x in self.game.players.values()])}))
                         except:
                             pass
             else:
@@ -108,7 +112,9 @@ class server():
                         
 
     def movePlayer(self, name, space):
-        print 'move %s to %s' % (name, space)
+        player = self.game.players[name]
+        newSpace = self.game.board[space]
+        player.currentSpace = newSpace
 
     def sendTurnMessage(self):
         self.broadcastMessageToAll('Awaiting %s to make his/her move...' % self.game.currentPlayer.name)
@@ -123,8 +129,9 @@ class server():
         self.users[self.game.currentPlayer.name].send('yourTurn:'+pickle.dumps([x.identifier for x in conns]))
 
 def main():
-    s = server('192.168.41.27', 4004)
-
+    #s = server('192.168.41.27', 4004)
+    s = server('10.0.1.10', 4004)
+    
     while True:
         try:
             # Accept new connections
@@ -150,8 +157,6 @@ def main():
                             s.createNewGame()
                         elif splt2[0] == 'joinGame':
                             s.joinGame(name, splt2[1])
-                        elif splt2[0] == 'requestingChars':
-                            conn.send('usedChars:'+pickle.dumps(s.game.players))
                         elif splt2[0] == 'ready':
                             s.broadcastMessageToAll('%s is ready to start!' % name)
                             s.playersReady.append(name)
