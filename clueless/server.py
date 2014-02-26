@@ -109,7 +109,8 @@ class server():
                     conn.send('updateGameboard:'+pickle.dumps(self.playerLocations))
                 time.sleep(.1)
                 for name,conn in self.users.items():
-                    conn.send('cards:'+pickle.dumps([x.identifier for x in self.game.players[name].cards]))
+                    conn.send('cards:'+pickle.dumps([x.identifier for x in self.game.players[name].cards.values()]))
+                time.sleep(.1)
                 self.sendTurnMessage()
             else:
                 self.broadcastMessageToUser(name, 'Not all players are ready to start....')
@@ -144,13 +145,16 @@ class server():
             else:
                 conns.append(conn)
         self.users[self.game.currentPlayer.name].send('yourTurn:'+pickle.dumps([x.identifier for x in conns]))
-	time.sleep(.1)	
-	self.broadcastMessageToAll('Awaiting %s to make his/her move...' % self.game.currentPlayer.name)
+	time.sleep(.1)
+	for name,conn in self.users.items():
+            if name != self.game.currentPlayer.name:
+                self.broadcastMessageToUser(name,'Awaiting %s to make his/her move...' % self.game.currentPlayer.name)
 
     def endTurn(self, name):
         self.broadcastMessageToAll('%s has ended his/her turn...' % name)
         self.game.turnOrder.append(self.game.turnOrder.pop(0))
         self.game.currentPlayer = self.game.turnOrder[0]
+        time.sleep(.1)
         self.sendTurnMessage()
 
     def makeSuggestion(self, name, pickled):
@@ -158,37 +162,51 @@ class server():
         suspect = str(suggestion[0])
         weapon = str(suggestion[1])
         room = self.game.players[name].currentSpace.identifier
-        self.broadcastMessageToAll('%s suggests that the crime was committed in the %s by %s with the %s.' % (name,room,suspect,weapon)) 
-        if suspect in [x.character for x in self.game.players.values()]:
-            self.game.players[name].currentSpace = self.game.board[room]
+        self.broadcastMessageToAll('%s suggests that the crime was committed in the %s by %s with the %s.' % (name,room,suspect,weapon))
+        # Check if alleged suspect is part of this game
+        # If so, update that player's current space
+        for player in self.game.players.values():
+            if player.character == suspect:
+                player.currentSpace = self.game.board[room]
         self.playerLocations[suspect] = room
         time.sleep(.1)
+        # Tell everyone to redraw their gameboards
         for conn in self.users.values():
             conn.send('updateGameboard:'+pickle.dumps(self.playerLocations))
+        # Iterate through the list of players
+        # If they have none of the suggested cards, move to the next person
+        # If they have one of the cards, show it to the suggester
+        # If they have more than one, send them a signal asking them to pick one
         for i in range(1,len(self.game.turnOrder)):
             person = self.game.turnOrder[i].name
             cards = self.game.turnOrder[i].cards
-            cardIds = [x.identifier for x in cards]
             show = []
-            if suspect in cardIds:
-                show.append(cards[cards.index(suspect)])
-            elif room in cards:
-                show.append(cards[cards.index(room)])
-            elif weapon in cards:
-                show.append(cards[card.index(weapon)])
+            if suspect in cards:
+                show.append(cards[suspect])
+            if room in cards:
+                show.append(cards[room])
+            if weapon in cards:
+                show.append(cards[weapon])
             if len(show) == 0:
                 continue
             elif len(show) == 1:
                 self.users[name].send('%s has shown you the %s card.' % (person,show[0].identifier))
                 time.sleep(.1)
                 self.users[person].send('You have shown %s the %s card.' % (name,show[0].identifier))
+                break
             elif len(show) > 1:
-                self.users[person].send('chooseCardToShow')
-            
+                self.users[person].send('chooseCardToShow:'+pickle.dumps([x.identifier for x in show])+':'+name)
+                break
+
+    def revealCard(self, name, card, person):
+        print 'IN REVEAL CARD'
+        self.users[name].send('You have shown %s the %s card.' % (person,card))
+        time.sleep(.1)
+        self.users[person].send('%s has shown you the %s card.' % (name,card))
 
 def main():
-    #s = server('192.168.41.27', 4004)
-    s = server('10.0.1.10', 4004)
+    s = server('192.168.100.14', 4004)
+    #s = server('10.0.1.10', 4004)
     
     while True:
         try:
@@ -226,6 +244,8 @@ def main():
                             s.endTurn(name)
                         elif splt2[0] == 'makingSuggestion':
                             s.makeSuggestion(name,splt2[1])
+                        elif splt2[0] == 'revealCard':
+                            s.revealCard(name,splt2[1],splt2[2])
                     elif splt[0] == 'message':
                         s.broadcastMessageToAll('%s> %s' % (name, splt[1]))
                 else:

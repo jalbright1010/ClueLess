@@ -17,14 +17,15 @@ class MainWindow(QtGui.QMainWindow):
     turnSignal = QtCore.pyqtSignal(str)
     suggestionSignal = QtCore.pyqtSignal()
     cardSignal = QtCore.pyqtSignal(str)
+    revealSignal = QtCore.pyqtSignal(str,str)
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        host = '98.218.228.27'
+        #host = '98.218.228.27'
         #host = '127.0.0.1'
-        #host = '192.168.41.27'
-        port = 40004
-        #port = 4004
+        host = '192.168.100.14'
+        #port = 40004
+        port = 4004
         self.connectToServer(host, port)
         self.receiveSignal.connect(self.appendMessage)
         self.usernameSignal.connect(self.askForUsername)
@@ -33,6 +34,7 @@ class MainWindow(QtGui.QMainWindow):
         self.turnSignal.connect(self.createMoves)
         self.suggestionSignal.connect(self.createSuggestionPicker)
         self.cardSignal.connect(self.createCards)
+        self.revealSignal.connect(self.createRevealPicker)
         self.initUI()
         self.createReceiveThread()
         
@@ -208,16 +210,12 @@ class MainWindow(QtGui.QMainWindow):
         self.suspectCombo = QtGui.QComboBox()
         for suspect in gameplay.PEOPLE:
             self.suspectCombo.addItem(suspect)
-        self.roomCombo = QtGui.QComboBox()
-        for room in gameplay.ROOMS:
-            self.roomCombo.addItem(room)
         self.weaponCombo = QtGui.QComboBox()
         for weapon in gameplay.WEAPONS:
             self.weaponCombo.addItem(weapon)
         button = QtGui.QPushButton('Make Suggestion')
         button.clicked.connect(self.sendSuggestionMessage)
         form.addRow(self.suspectCombo)
-        form.addRow(self.roomCombo)
         form.addRow(self.weaponCombo)
         form.addRow(button)
         self.suggestionPicker.setLayout(form)
@@ -225,7 +223,6 @@ class MainWindow(QtGui.QMainWindow):
 
     def sendSuggestionMessage(self):
         suggestion = [self.suspectCombo.currentText(),
-                      self.roomCombo.currentText(),
                       self.weaponCombo.currentText()]
         self.client.send('function::makingSuggestion:'+pickle.dumps(suggestion))
         self.suggestionPicker.close()
@@ -255,11 +252,37 @@ class MainWindow(QtGui.QMainWindow):
             form.addRow(QtGui.QLabel(card))
         self.cardGroup.setLayout(form)
 
+    @QtCore.pyqtSlot(str,str)
+    def createRevealPicker(self, pickled, name):
+        cards = pickle.loads(str(pickled))
+        self.revealPicker = QtGui.QWidget()
+        self.revealPicker.name = name
+        form = QtGui.QFormLayout()
+        form.addRow(QtGui.QLabel('Choose which card to reveal to %s:' % name))
+        self.revealPicker.cardList = QtGui.QListWidget()
+        for card in cards:
+            self.revealPicker.cardList.addItem(card)
+        self.revealPicker.cardList.setCurrentRow(0)
+        form.addRow(self.revealPicker.cardList)
+        button = QtGui.QPushButton('Reveal')
+        button.setFixedSize(75,25)
+        button.clicked.connect(self.chooseToReveal)
+        form.addRow(button)
+        self.revealPicker.setLayout(form)
+        self.revealPicker.show()
+
+    def chooseToReveal(self):
+        choice = str(self.revealPicker.cardList.currentItem().text())
+        name = self.revealPicker.name
+        self.client.send('function::revealCard:%s:%s' % (choice,name))
+        self.revealPicker.close()
+
     def createReceiveThread(self):
         def threaded():
             try:
                 while True:
                     s = self.client.recv(1024).strip()
+                    print s
                     if s == 'username':
                         self.usernameSignal.emit()
                     elif s == 'suggestion':
@@ -274,6 +297,8 @@ class MainWindow(QtGui.QMainWindow):
                             self.turnSignal.emit(splt[1])
                         elif splt[0] == 'cards':
                             self.cardSignal.emit(splt[1])
+                        elif splt[0] == 'chooseCardToShow':
+                            self.revealSignal.emit(splt[1],splt[2])
                     else:
                         self.receiveSignal.emit(str(s))
             except (SystemExit, KeyboardInterrupt):

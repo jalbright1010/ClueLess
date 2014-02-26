@@ -154,10 +154,9 @@ class game():
         self.deck.shuffleCards()
 
         # Deal the rest of the cards
-        while len(self.deck.cards) > 0:
-            for player in self.players:
-                if len(self.deck.cards) != 0:
-                    self.players[player].addCard(self.deck.cards.pop())
+        deal = self.deck.dealCards(len(self.players))
+        for i in range(len(self.players.values())):
+            self.players.values()[i].cards = deal.pop(i)
         
         # Determine the order based on which suspects
         # have been used by players in the game
@@ -193,6 +192,20 @@ class carddeck():
 
         return caseFile
 
+    def dealCards(self, numPlayers):
+        deal = {}
+        for i in range(numPlayers):
+            deal[i] = {}
+        j = 0
+        for card in self.cards:
+            deal[j][card.identifier] = card
+            if j == len(deal)-1:
+                j = 0
+            else:
+                j = j+1
+
+        return deal
+
 class card():
     identifier = ''
     cardType = ''
@@ -220,7 +233,7 @@ class hallway():
 class player():
     name = ''
     character = ''
-    cards = []
+    cards = {}
     currentSpace = None
 
     def __init__(self, name, char, space):
