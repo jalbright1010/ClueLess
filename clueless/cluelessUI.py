@@ -111,6 +111,7 @@ class MainWindow(QtGui.QMainWindow):
         self.getCharacter.close()
         self.setWindowOpacity(1.0)
         self.setDisabled(False)
+        self.inputWindow.setReadOnly(False)
 
     @QtCore.pyqtSlot(str)
     def updateGameboard(self, pickled):
@@ -309,7 +310,7 @@ class UsernameDialog(QtGui.QDialog):
         self.name = ''
         
         self.label = QtGui.QLabel('Please enter your username:')
-        self.edit = QtGui.QLineEdit('enter your username for gameplay')
+        self.edit = QtGui.QLineEdit()
         
         layout.addRow(self.label)
         layout.addRow(self.edit)
