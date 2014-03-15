@@ -257,7 +257,7 @@ class MainWindow(QtGui.QMainWindow):
     def showRevealDialog(self, pickled, name):
         self.setDisabled(True)
         self.setWindowOpacity(.90)
-        cards = pickle.load(str(pickled))
+        cards = pickle.loads(str(pickled))
         self.getReveal.player = name
         self.getReveal.label.setText('Choose which card to reveal to %s:' % name)
         for card in cards:
