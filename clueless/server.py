@@ -114,9 +114,9 @@ class server():
                 self.sendTurnMessage()
             else:
                 self.broadcastMessageToUser(name, 'Not all players are ready to start....')
-                for name in self.users.keys():
-                    if name not in self.playersReady:
-                        self.broadcastMessageToUser(name, '%s is not ready to start' % name)
+                for n in self.users.keys():
+                    if n not in self.playersReady:
+                        self.broadcastMessageToUser(name, '%s is not ready to start' % n)
                         
 
     def movePlayer(self, name, space):
@@ -189,24 +189,18 @@ class server():
                 show.append(cards[weapon])
             if len(show) == 0:
                 continue
-            elif len(show) == 1:
-                self.users[name].send('%s has shown you the %s card.' % (person,show[0].identifier))
-                time.sleep(.1)
-                self.users[person].send('You have shown %s the %s card.' % (name,show[0].identifier))
-                break
-            elif len(show) > 1:
-                self.users[person].send('chooseCardToShow:'+pickle.dumps([x.identifier for x in show])+':'+name)
+            else:
+                self.users[person].send('revealCard:'+pickle.dumps([x.identifier for x in show])+':'+name)
                 break
 
     def revealCard(self, name, card, person):
-        print 'IN REVEAL CARD'
         self.users[name].send('You have shown %s the %s card.' % (person,card))
         time.sleep(.1)
         self.users[person].send('%s has shown you the %s card.' % (name,card))
 
 def main():
-    s = server('192.168.100.14', 4004)
-    #s = server('10.0.1.10', 4004)
+    #s = server('192.168.100.14', 4004)
+    s = server('10.0.1.10', 4004)
     
     while True:
         try:
@@ -253,7 +247,8 @@ def main():
                         # Empty string is given on disconnect
                         del s.users[name]
                         if s.game:
-                            del s.game.players[name]
+                            if s.game.players[name]:
+                                del s.game.players[name]
                         s.broadcastMessageToAll('--- %s leaves ---' % name)
             time.sleep(.1)
         except (SystemExit, KeyboardInterrupt):
