@@ -18,9 +18,14 @@ class MainWindow(QtGui.QMainWindow):
     suggestionSignal = QtCore.pyqtSignal()
     cardSignal = QtCore.pyqtSignal(str)
     revealSignal = QtCore.pyqtSignal(str,str)
+    falseAccusationSignal = QtCore.pyqtSignal()
+    gameOverSignal = QtCore.pyqtSignal(str)
+    winSignal = QtCore.pyqtSignal()
 
     def __init__(self):
         super(MainWindow, self).__init__()
+        self.hasAccusation = True
+        
         # Make a connection to the Clue-Less server
         host = '69.255.109.89'
         #host = '127.0.0.1'
@@ -38,12 +43,16 @@ class MainWindow(QtGui.QMainWindow):
         self.suggestionSignal.connect(self.showSuggestionDialog)
         self.cardSignal.connect(self.createCards)
         self.revealSignal.connect(self.showRevealDialog)
+        self.falseAccusationSignal.connect(self.eliminateMoves)
+        self.gameOverSignal.connect(self.gameOver)
+        self.winSignal.connect(self.youWin)
         
         # Create custom dialogs
         self.getUsername = UsernameDialog()
         self.getCharacter = CharacterDialog()
         self.getSuggestion = SuggestionDialog()
         self.getReveal = RevealDialog()
+        self.getAccusation = AccusationDialog()
         
         self.initUI()
         self.createReceiveThread()
@@ -184,18 +193,22 @@ class MainWindow(QtGui.QMainWindow):
     @QtCore.pyqtSlot(str)
     def createMoves(self, pickled):
         moves = pickle.loads(str(pickled))
-        form = QtGui.QFormLayout()
+        layout = QtGui.QFormLayout()
         
         for space in moves:
             label = QtGui.QLabel('Move to %s...' % space)
             button = QtGui.QPushButton('Move')
             button.clicked.connect(self.handleMoveChoice(space))
-            form.addRow(label,button)
+            layout.addRow(label,button)
+        if self.hasAccusation:
+            accButton = QtGui.QPushButton('Make Accusation')
+            accButton.clicked.connect(self.handleAccusation)
+            layout.addRow(accButton)
 
         for i in reversed(range(self.moveGroup.layout().count())):
             sip.delete(self.moveGroup.layout().itemAt(i).widget())
         sip.delete(self.moveGroup.layout())
-        self.moveGroup.setLayout(form)
+        self.moveGroup.setLayout(layout)
 
     def handleMoveChoice(self, space):
         def clicked():
@@ -207,6 +220,11 @@ class MainWindow(QtGui.QMainWindow):
             button = QtGui.QPushButton('End Turn')
             button.clicked.connect(self.handleEndTurn)
             layout.addRow(button)
+            if self.hasAccusation:
+                accButton = QtGui.QPushButton('Make Accusation')
+                accButton.clicked.connect(self.handleAccusation)
+                layout.addRow(accButton)
+        
             for i in reversed(range(self.moveGroup.layout().count())):
                 sip.delete(self.moveGroup.layout().itemAt(i).widget())
             sip.delete(self.moveGroup.layout())
@@ -221,6 +239,23 @@ class MainWindow(QtGui.QMainWindow):
             sip.delete(self.moveGroup.layout().itemAt(i).widget())
         sip.delete(self.moveGroup.layout())
         self.moveGroup.setLayout(layout)
+
+    def handleAccusation(self):
+        self.getAccusation.button.clicked.connect(self.handleAccusationChoice)
+        self.setDisabled(True)
+        self.setWindowOpacity(0.90)
+        self.getAccusation.show()
+        
+    def handleAccusationChoice(self):
+        accusation = [self.getAccusation.suspectCombo.currentText(),
+                      self.getAccusation.weaponCombo.currentText(),
+                      self.getAccusation.roomCombo.currentText()]
+        self.connection.send('function::makingAccusation:'+
+                             pickle.dumps(accusation))
+        self.getAccusation.close()
+        self.setWindowOpacity(1.)
+        self.setDisabled(False)
+        self.hasAccusation = False
 
     def sendMessage(self):
         self.connection.send('message::'+str(self.inputWindow.text()))
@@ -274,6 +309,30 @@ class MainWindow(QtGui.QMainWindow):
         self.getReveal.close()
         self.setWindowOpacity(1.)
         self.setDisabled(False)
+    
+    def eliminateMoves(self):
+        layout = QtGui.QFormLayout()
+        layout.addRow(QtGui.QLabel('You can no longer move.'))
+        for i in reversed(range(self.moveGroup.layout().count())):
+            sip.delete(self.moveGroup.layout().itemAt(i).widget())
+        sip.delete(self.moveGroup.layout())
+        self.moveGroup.setLayout(layout) 
+     
+    def gameOver(self, name):
+        layout = QtGui.QFormLayout()
+        layout.addRow(QtGui.QLabel('Game Over! %s has won!' % name))
+        for i in reversed(range(self.centralWidget.layout().count())):
+            sip.delete(self.centralWidget.layout().itemAt(i).widget())
+        sip.delete(self.centralWidget.layout())
+        self.centralWidget.setLayout(layout) 
+        
+    def youWin(self):
+        layout = QtGui.QFormLayout()
+        layout.addRow(QtGui.QLabel('Congratulations! You win!'))
+        for i in reversed(range(self.centralWidget.layout().count())):
+            sip.delete(self.centralWidget.layout().itemAt(i).widget())
+        sip.delete(self.centralWidget.layout())
+        self.centralWidget.setLayout(layout)
         
     def createReceiveThread(self):
         def threaded():
@@ -292,11 +351,17 @@ class MainWindow(QtGui.QMainWindow):
                             self.cardSignal.emit(splt[1])
                         elif splt[0] == 'revealCard':
                             self.revealSignal.emit(splt[1],splt[2])
+                        elif splt[0] == 'gameOver':
+                            self.gameOverSignal.emit(splt[1])
                     else:
                         if s == 'username':
                             self.usernameSignal.emit()
                         elif s == 'suggestion':
                             self.suggestionSignal.emit()
+                        elif s == 'falseAccusation':
+                            self.falseAccusationSignal.emit()
+                        elif s == 'winner':
+                            self.winSignal.emit()
                         else:
                             self.receiveSignal.emit(str(s))
             except (SystemExit, KeyboardInterrupt):
@@ -372,11 +437,39 @@ class RevealDialog(QtGui.QDialog):
         layout.addRow(self.button)
         
         self.setLayout(layout)
+        
+class AccusationDialog(QtGui.QDialog):
+    def __init__(self,parent=None):
+        super(AccusationDialog,self).__init__(parent)
+        layout = QtGui.QFormLayout()
+          
+        self.label = QtGui.QLabel('Select the items for your accusation:')
+        self.suspectCombo = QtGui.QComboBox()
+        self.weaponCombo = QtGui.QComboBox()
+        self.roomCombo = QtGui.QComboBox()
+        self.button = QtGui.QPushButton('Make Accusation')
+        self.button.setFixedSize(125,25)
+        
+        for suspect in gameplay.PEOPLE:
+            self.suspectCombo.addItem(suspect)
+        for weapon in gameplay.WEAPONS:
+            self.weaponCombo.addItem(weapon)
+        for room in gameplay.ROOMS:
+            self.roomCombo.addItem(room)
+            
+        layout.addRow(self.label)
+        layout.addRow(self.suspectCombo)
+        layout.addRow(self.weaponCombo)
+        layout.addRow(self.roomCombo)
+        layout.addRow(self.button)
+        
+        self.setLayout(layout)
  
 def main():
     app = QtGui.QApplication(sys.argv)
     window = MainWindow()
     window.show()
+    window.raise_()
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
