@@ -52,7 +52,7 @@ class MainWindow(QtGui.QMainWindow):
         self.getCharacter = CharacterDialog()
         self.getSuggestion = SuggestionDialog()
         self.getReveal = RevealDialog()
-        self.getAccusation = AccusationDialog()
+        self.getAccusation = AccusationDialog(self)
         
         self.initUI()
         self.createReceiveThread()
@@ -117,7 +117,7 @@ class MainWindow(QtGui.QMainWindow):
     def handleCharacterChoice(self):
         self.character = str(self.getCharacter.characterList.currentItem().text())
         self.connection.send('function::joinGame:'+self.character)
-        self.getCharacter.close()
+        self.getCharacter.closeEvent(QtGui.QCloseEvent(),valid=True)
         self.setWindowOpacity(1.0)
         self.setDisabled(False)
         self.inputWindow.setReadOnly(False)
@@ -285,7 +285,7 @@ class MainWindow(QtGui.QMainWindow):
                       self.getSuggestion.weaponCombo.currentText()]
         self.connection.send('function::makingSuggestion:'+
                              pickle.dumps(suggestion))
-        self.getSuggestion.close()
+        self.getSuggestion.closeEvent(QtGui.QCloseEvent(),valid=True)
         self.setWindowOpacity(1.)
         self.setDisabled(False)
 
@@ -306,7 +306,7 @@ class MainWindow(QtGui.QMainWindow):
         choice = str(self.getReveal.cardList.currentItem().text())
         name = self.getReveal.player
         self.connection.send('function::revealCard:%s:%s' % (choice,name))
-        self.getReveal.close()
+        self.getReveal.closeEvent(QtGui.QCloseEvent(),valid=True)
         self.setWindowOpacity(1.)
         self.setDisabled(False)
     
@@ -319,20 +319,16 @@ class MainWindow(QtGui.QMainWindow):
         self.moveGroup.setLayout(layout) 
      
     def gameOver(self, name):
-        layout = QtGui.QFormLayout()
-        layout.addRow(QtGui.QLabel('Game Over! %s has won!' % name))
-        for i in reversed(range(self.centralWidget.layout().count())):
-            sip.delete(self.centralWidget.layout().itemAt(i).widget())
-        sip.delete(self.centralWidget.layout())
-        self.centralWidget.setLayout(layout) 
+        self.setDisabled(True)
+        self.setWindowOpacity(0.90)
+        over = QtGui.QMessageBox.information(self, 'Game Over', 'Game Over! %s wins!' % name, 
+                                             QtGui.QMessageBox.Ok, QtGui.QMessageBox.Ok)
         
     def youWin(self):
-        layout = QtGui.QFormLayout()
-        layout.addRow(QtGui.QLabel('Congratulations! You win!'))
-        for i in reversed(range(self.centralWidget.layout().count())):
-            sip.delete(self.centralWidget.layout().itemAt(i).widget())
-        sip.delete(self.centralWidget.layout())
-        self.centralWidget.setLayout(layout)
+        self.setDisabled(True)
+        self.setWindowOpacity(0.90)
+        win = QtGui.QMessageBox.information(self, 'Congratulations!', 'Congratulations! You Win!',
+                                            QtGui.QMessageBox.Ok, QtGui.QMessageBox.Ok)
         
     def createReceiveThread(self):
         def threaded():
@@ -372,7 +368,6 @@ class UsernameDialog(QtGui.QDialog):
     def __init__(self,parent=None):
         super(UsernameDialog,self).__init__(parent)
         layout = QtGui.QFormLayout()
-        self.name = ''
         
         self.label = QtGui.QLabel('Please enter your username:')
         self.edit = QtGui.QLineEdit()
@@ -381,6 +376,12 @@ class UsernameDialog(QtGui.QDialog):
         layout.addRow(self.edit)
         
         self.setLayout(layout)
+        
+    def closeEvent(self, event):
+        if len(self.edit.text()) == 0:
+            event.ignore()
+        else:
+            event.accept()
 
 class CharacterDialog(QtGui.QDialog):
     def __init__(self,parent=None):
@@ -397,6 +398,12 @@ class CharacterDialog(QtGui.QDialog):
         layout.addRow(self.button)
         
         self.setLayout(layout)
+        
+    def closeEvent(self, event, valid=False):
+        if not valid:
+            event.ignore()
+        else:
+            super(CharacterDialog,self).closeEvent(event)
   
 class SuggestionDialog(QtGui.QDialog):
     def __init__(self,parent=None):
@@ -420,6 +427,12 @@ class SuggestionDialog(QtGui.QDialog):
         layout.addRow(self.button)
         
         self.setLayout(layout)
+        
+    def closeEvent(self, event, valid=False):
+        if not valid:
+            event.ignore()
+        else:
+            super(SuggestionDialog,self).closeEvent(event)
  
 class RevealDialog(QtGui.QDialog):
     def __init__(self,parent=None):
@@ -438,6 +451,12 @@ class RevealDialog(QtGui.QDialog):
         
         self.setLayout(layout)
         
+    def closeEvent(self, event, valid=False):
+        if not valid:
+            event.ignore()
+        else:
+            super(RevealDialog,self).closeEvent(event)
+        
 class AccusationDialog(QtGui.QDialog):
     def __init__(self,parent=None):
         super(AccusationDialog,self).__init__(parent)
@@ -445,25 +464,29 @@ class AccusationDialog(QtGui.QDialog):
           
         self.label = QtGui.QLabel('Select the items for your accusation:')
         self.suspectCombo = QtGui.QComboBox()
-        self.weaponCombo = QtGui.QComboBox()
         self.roomCombo = QtGui.QComboBox()
+        self.weaponCombo = QtGui.QComboBox()
         self.button = QtGui.QPushButton('Make Accusation')
         self.button.setFixedSize(125,25)
         
         for suspect in gameplay.PEOPLE:
             self.suspectCombo.addItem(suspect)
-        for weapon in gameplay.WEAPONS:
-            self.weaponCombo.addItem(weapon)
         for room in gameplay.ROOMS:
             self.roomCombo.addItem(room)
+        for weapon in gameplay.WEAPONS:
+            self.weaponCombo.addItem(weapon)
             
         layout.addRow(self.label)
         layout.addRow(self.suspectCombo)
-        layout.addRow(self.weaponCombo)
         layout.addRow(self.roomCombo)
+        layout.addRow(self.weaponCombo)
         layout.addRow(self.button)
         
         self.setLayout(layout)
+    
+    def closeEvent(self, event):
+        self.parent().setWindowOpacity(1.0)
+        self.parent().setDisabled(False)
  
 def main():
     app = QtGui.QApplication(sys.argv)
