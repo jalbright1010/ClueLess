@@ -108,6 +108,9 @@ class server():
         if self.game:
             if len(self.playersReady) == len(self.users):
                 self.game.start()
+                for conn in self.users.values():
+                    time.sleep(.05)
+                    conn.send('started')
                 time.sleep(.05)
                 self.broadcastMessageToAll('%s has started the game! Good Luck!' % name)
                 self.acceptingConnections = False
@@ -194,9 +197,9 @@ class server():
         # If they have none of the suggested cards, move to the next person
         # If they have one of the cards, show it to the suggester
         # If they have more than one, send them a signal asking them to pick one
-        for i in range(1,len(self.game.turnOrder)):
-            person = self.game.turnOrder[i].name
-            cards = self.game.turnOrder[i].cards
+        for i in range(1,len(self.game.disproveOrder)):
+            person = self.game.disproveOrder[i].name
+            cards = self.game.disproveOrder[i].cards
             show = []
             if suspect in cards:
                 show.append(cards[suspect])

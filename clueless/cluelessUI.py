@@ -139,10 +139,10 @@ class MainWindow(QtGui.QMainWindow):
     def createMenuBar(self):
         menubar = self.menuBar()
         mainMenu = menubar.addMenu('File')
-        start = QtGui.QAction('Start Game', self)
-        start.setShortcut('Ctrl+S')
-        start.triggered.connect(self.sendStartSignal)
-        mainMenu.addAction(start)
+        self.startAction = QtGui.QAction('Start Game', self)
+        self.startAction.setShortcut('Ctrl+S')
+        self.startAction.triggered.connect(self.sendStartSignal)
+        mainMenu.addAction(self.startAction)
         self.readyAction = QtGui.QAction('Ready to Start', self)
         self.readyAction.setShortcut('Ctrl+R')
         self.readyAction.triggered.connect(self.sendReadySignal)
@@ -352,6 +352,8 @@ class MainWindow(QtGui.QMainWindow):
                     else:
                         if s == 'username':
                             self.usernameSignal.emit()
+                        elif s == 'started':
+                            self.startAction.setEnabled(False)
                         elif s == 'suggestion':
                             self.suggestionSignal.emit()
                         elif s == 'falseAccusation':
