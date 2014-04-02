@@ -17,7 +17,7 @@ class MainWindow(QtGui.QMainWindow):
     turnSignal = QtCore.pyqtSignal(str)
     suggestionSignal = QtCore.pyqtSignal()
     cardSignal = QtCore.pyqtSignal(str)
-    revealSignal = QtCore.pyqtSignal(str,str)
+    revealSignal = QtCore.pyqtSignal(str, str)
     falseAccusationSignal = QtCore.pyqtSignal()
     gameOverSignal = QtCore.pyqtSignal(str)
     winSignal = QtCore.pyqtSignal()
@@ -28,9 +28,9 @@ class MainWindow(QtGui.QMainWindow):
         
         # Make a connection to the Clue-Less server
         host = '69.255.109.89'
-        #host = '127.0.0.1'
-        #host = '192.168.41.27'
         port = 40004
+        #host = '127.0.0.1'
+        # host = '192.168.41.27'
         #port = 4004
         self.connectToServer(host, port)
         
@@ -59,7 +59,7 @@ class MainWindow(QtGui.QMainWindow):
         
     # Initalize the GUI
     def initUI(self):
-        self.initWidth = (QtGui.QDesktopWidget().availableGeometry().width() *.9)
+        self.initWidth = (QtGui.QDesktopWidget().availableGeometry().width() * .9)
         self.initHeight = (QtGui.QDesktopWidget().availableGeometry().height() * .9)
         self.resize(self.initWidth, self.initHeight)
         
@@ -73,7 +73,7 @@ class MainWindow(QtGui.QMainWindow):
         self.cardGroup = QtGui.QGroupBox()
         self.cardGroup.setTitle('Cards')
         
-        self.centralWidget.form.addRow(self.createBoard(),self.cardGroup)
+        self.centralWidget.form.addRow(self.createBoard(), self.cardGroup)
         self.centralWidget.form.addRow(self.createChatGroup(), self.createMoveGroup())
         
         self.centralWidget.setLayout(self.centralWidget.form)
@@ -116,8 +116,8 @@ class MainWindow(QtGui.QMainWindow):
     # Stores a local copy of the character
     def handleCharacterChoice(self):
         self.character = str(self.getCharacter.characterList.currentItem().text())
-        self.connection.send('function::joinGame:'+self.character)
-        self.getCharacter.closeEvent(QtGui.QCloseEvent(),valid=True)
+        self.connection.send('function::joinGame:' + self.character)
+        self.getCharacter.closeEvent(QtGui.QCloseEvent(), valid=True)
         self.setWindowOpacity(1.0)
         self.setDisabled(False)
         self.inputWindow.setReadOnly(False)
@@ -139,10 +139,10 @@ class MainWindow(QtGui.QMainWindow):
     def createMenuBar(self):
         menubar = self.menuBar()
         mainMenu = menubar.addMenu('File')
-        self.startAction = QtGui.QAction('Start Game', self)
-        self.startAction.setShortcut('Ctrl+S')
-        self.startAction.triggered.connect(self.sendStartSignal)
-        mainMenu.addAction(self.startAction)
+        start = QtGui.QAction('Start Game', self)
+        start.setShortcut('Ctrl+S')
+        start.triggered.connect(self.sendStartSignal)
+        mainMenu.addAction(start)
         self.readyAction = QtGui.QAction('Ready to Start', self)
         self.readyAction.setShortcut('Ctrl+R')
         self.readyAction.triggered.connect(self.sendReadySignal)
@@ -199,7 +199,7 @@ class MainWindow(QtGui.QMainWindow):
             label = QtGui.QLabel('Move to %s...' % space)
             button = QtGui.QPushButton('Move')
             button.clicked.connect(self.handleMoveChoice(space))
-            layout.addRow(label,button)
+            layout.addRow(label, button)
         if self.hasAccusation:
             accButton = QtGui.QPushButton('Make Accusation')
             accButton.clicked.connect(self.handleAccusation)
@@ -212,7 +212,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def handleMoveChoice(self, space):
         def clicked():
-            self.connection.send('function::movePlayer:'+space)
+            self.connection.send('function::movePlayer:' + space)
             self.gameboard.players[self.character] = space
             self.gameboard.update()
             
@@ -250,7 +250,7 @@ class MainWindow(QtGui.QMainWindow):
         accusation = [self.getAccusation.suspectCombo.currentText(),
                       self.getAccusation.weaponCombo.currentText(),
                       self.getAccusation.roomCombo.currentText()]
-        self.connection.send('function::makingAccusation:'+
+        self.connection.send('function::makingAccusation:' + 
                              pickle.dumps(accusation))
         self.getAccusation.close()
         self.setWindowOpacity(1.)
@@ -258,19 +258,31 @@ class MainWindow(QtGui.QMainWindow):
         self.hasAccusation = False
 
     def sendMessage(self):
-        self.connection.send('message::'+str(self.inputWindow.text()))
+        self.connection.send('message::' + str(self.inputWindow.text()))
         self.inputWindow.clear()
 
     def createBoard(self):
-        self.gameboard = gameplay.board(self.width()/2, self.height()/2)
+        self.gameboard = gameplay.board(self.width() / 2, self.height() / 2)
         return self.gameboard
 
     @QtCore.pyqtSlot(str)
     def createCards(self, pickled):
         cards = pickle.loads(str(pickled))
         layout = QtGui.QFormLayout()
-        for card in cards:
-            layout.addRow(QtGui.QLabel(card))
+        row1 = QtGui.QHBoxLayout()
+        row2 = QtGui.QHBoxLayout()
+        for card in cards[:3]:
+            label = QtGui.QLabel()
+            pixmap = QtGui.QPixmap('images/'+card+'.jpg')
+            label.setPixmap(pixmap.scaled(100, 150))
+            row1.addWidget(label)
+        for card in cards[3:6]:
+            label = QtGui.QLabel()
+            pixmap = QtGui.QPixmap('images/'+card+'.jpg')
+            label.setPixmap(pixmap.scaled(100, 150))
+            row2.addWidget(label)
+        layout.addRow(row1)
+        layout.addRow(row2)
         self.cardGroup.setLayout(layout)
 
     @QtCore.pyqtSlot()
@@ -283,19 +295,20 @@ class MainWindow(QtGui.QMainWindow):
     def handleSuggestion(self):
         suggestion = [self.getSuggestion.suspectCombo.currentText(),
                       self.getSuggestion.weaponCombo.currentText()]
-        self.connection.send('function::makingSuggestion:'+
+        self.connection.send('function::makingSuggestion:' + 
                              pickle.dumps(suggestion))
-        self.getSuggestion.closeEvent(QtGui.QCloseEvent(),valid=True)
+        self.getSuggestion.closeEvent(QtGui.QCloseEvent(), valid=True)
         self.setWindowOpacity(1.)
         self.setDisabled(False)
 
-    @QtCore.pyqtSlot(str,str)
+    @QtCore.pyqtSlot(str, str)
     def showRevealDialog(self, pickled, name):
         self.setDisabled(True)
         self.setWindowOpacity(.90)
         cards = pickle.loads(str(pickled))
         self.getReveal.player = name
         self.getReveal.label.setText('Choose which card to reveal to %s:' % name)
+        self.getReveal.cardList.clear()
         for card in cards:
             self.getReveal.cardList.addItem(card)
         self.getReveal.cardList.setCurrentRow(0)
@@ -305,8 +318,8 @@ class MainWindow(QtGui.QMainWindow):
     def handleRevealChoice(self):
         choice = str(self.getReveal.cardList.currentItem().text())
         name = self.getReveal.player
-        self.connection.send('function::revealCard:%s:%s' % (choice,name))
-        self.getReveal.closeEvent(QtGui.QCloseEvent(),valid=True)
+        self.connection.send('function::revealCard:%s:%s' % (choice, name))
+        self.getReveal.closeEvent(QtGui.QCloseEvent(), valid=True)
         self.setWindowOpacity(1.)
         self.setDisabled(False)
     
@@ -321,7 +334,7 @@ class MainWindow(QtGui.QMainWindow):
     def gameOver(self, name):
         self.setDisabled(True)
         self.setWindowOpacity(0.90)
-        over = QtGui.QMessageBox.information(self, 'Game Over', 'Game Over! %s wins!' % name, 
+        over = QtGui.QMessageBox.information(self, 'Game Over', 'Game Over! %s wins!' % name,
                                              QtGui.QMessageBox.Ok, QtGui.QMessageBox.Ok)
         
     def youWin(self):
@@ -335,40 +348,39 @@ class MainWindow(QtGui.QMainWindow):
             try:
                 while True:
                     s = self.connection.recv(1024).strip()
-                    if ':' in s:
-                        splt = s.split(':')
-                        if splt[0] == 'updateGameboard':
-                            self.gameboardSignal.emit(splt[1])
-                        elif splt[0] == 'usedChars':
-                            self.characterSignal.emit(splt[1])
-                        elif splt[0] == 'yourTurn':
-                            self.turnSignal.emit(splt[1])
-                        elif splt[0] == 'cards':
-                            self.cardSignal.emit(splt[1])
-                        elif splt[0] == 'revealCard':
-                            self.revealSignal.emit(splt[1],splt[2])
-                        elif splt[0] == 'gameOver':
-                            self.gameOverSignal.emit(splt[1])
-                    else:
-                        if s == 'username':
-                            self.usernameSignal.emit()
-                        elif s == 'started':
-                            self.startAction.setEnabled(False)
-                        elif s == 'suggestion':
-                            self.suggestionSignal.emit()
-                        elif s == 'falseAccusation':
-                            self.falseAccusationSignal.emit()
-                        elif s == 'winner':
-                            self.winSignal.emit()
-                        else:
-                            self.receiveSignal.emit(str(s))
+                    if '::' in s:
+                        splt = s.split('::')
+                        if splt[0] == 'message':
+                            self.receiveSignal.emit(str(splt[1]))
+                        elif splt[0] == 'function':
+                            splt2 = splt[1].split(':')
+                            if splt2[0] == 'updateGameboard':
+                                self.gameboardSignal.emit(splt2[1])
+                            elif splt2[0] == 'usedChars':
+                                self.characterSignal.emit(splt2[1])
+                            elif splt2[0] == 'yourTurn':
+                                self.turnSignal.emit(splt2[1])
+                            elif splt2[0] == 'cards':
+                                self.cardSignal.emit(splt2[1])
+                            elif splt2[0] == 'revealCard':
+                                self.revealSignal.emit(splt2[1], splt2[2])
+                            elif splt2[0] == 'gameOver':
+                                self.gameOverSignal.emit(splt2[1])
+                            elif splt2[0] == 'username':
+                                self.usernameSignal.emit()
+                            elif splt2[0] == 'suggestion':
+                                self.suggestionSignal.emit()
+                            elif splt2[0] == 'falseAccusation':
+                                self.falseAccusationSignal.emit()
+                            elif splt2[0] == 'winner':
+                                self.winSignal.emit()
             except (SystemExit, KeyboardInterrupt):
                 sys.exit()
         self.receiveThread = thread.start_new_thread(threaded, ())    
 
 class UsernameDialog(QtGui.QDialog):
-    def __init__(self,parent=None):
-        super(UsernameDialog,self).__init__(parent)
+    def __init__(self, parent=None):
+        super(UsernameDialog, self).__init__(parent)
         layout = QtGui.QFormLayout()
         
         self.label = QtGui.QLabel('Please enter your username:')
@@ -386,14 +398,14 @@ class UsernameDialog(QtGui.QDialog):
             event.accept()
 
 class CharacterDialog(QtGui.QDialog):
-    def __init__(self,parent=None):
-        super(CharacterDialog,self).__init__(parent)
+    def __init__(self, parent=None):
+        super(CharacterDialog, self).__init__(parent)
         layout = QtGui.QFormLayout()
         
         self.label = QtGui.QLabel('Please choose your character:')
         self.characterList = QtGui.QListWidget()
         self.button = QtGui.QPushButton('Pick')
-        self.button.setFixedSize(65,25)
+        self.button.setFixedSize(65, 25)
         
         layout.addRow(self.label)
         layout.addRow(self.characterList)
@@ -405,18 +417,18 @@ class CharacterDialog(QtGui.QDialog):
         if not valid:
             event.ignore()
         else:
-            super(CharacterDialog,self).closeEvent(event)
+            super(CharacterDialog, self).closeEvent(event)
   
 class SuggestionDialog(QtGui.QDialog):
-    def __init__(self,parent=None):
-        super(SuggestionDialog,self).__init__(parent)
+    def __init__(self, parent=None):
+        super(SuggestionDialog, self).__init__(parent)
         layout = QtGui.QFormLayout()
           
         self.label = QtGui.QLabel('Select the items for your suggestion:')
         self.suspectCombo = QtGui.QComboBox()
         self.weaponCombo = QtGui.QComboBox()
         self.button = QtGui.QPushButton('Make Suggestion')
-        self.button.setFixedSize(125,25)
+        self.button.setFixedSize(125, 25)
         
         for suspect in gameplay.PEOPLE:
             self.suspectCombo.addItem(suspect)
@@ -434,18 +446,18 @@ class SuggestionDialog(QtGui.QDialog):
         if not valid:
             event.ignore()
         else:
-            super(SuggestionDialog,self).closeEvent(event)
+            super(SuggestionDialog, self).closeEvent(event)
  
 class RevealDialog(QtGui.QDialog):
-    def __init__(self,parent=None):
-        super(RevealDialog,self).__init__(parent)
+    def __init__(self, parent=None):
+        super(RevealDialog, self).__init__(parent)
         layout = QtGui.QFormLayout()
         self.player = ''
         
         self.label = QtGui.QLabel()
         self.cardList = QtGui.QListWidget()
         self.button = QtGui.QPushButton('Reveal')
-        self.button.setFixedSize(75,25)
+        self.button.setFixedSize(75, 25)
         
         layout.addRow(self.label)
         layout.addRow(self.cardList)
@@ -457,11 +469,11 @@ class RevealDialog(QtGui.QDialog):
         if not valid:
             event.ignore()
         else:
-            super(RevealDialog,self).closeEvent(event)
+            super(RevealDialog, self).closeEvent(event)
         
 class AccusationDialog(QtGui.QDialog):
-    def __init__(self,parent=None):
-        super(AccusationDialog,self).__init__(parent)
+    def __init__(self, parent=None):
+        super(AccusationDialog, self).__init__(parent)
         layout = QtGui.QFormLayout()
           
         self.label = QtGui.QLabel('Select the items for your accusation:')
@@ -469,7 +481,7 @@ class AccusationDialog(QtGui.QDialog):
         self.roomCombo = QtGui.QComboBox()
         self.weaponCombo = QtGui.QComboBox()
         self.button = QtGui.QPushButton('Make Accusation')
-        self.button.setFixedSize(125,25)
+        self.button.setFixedSize(125, 25)
         
         for suspect in gameplay.PEOPLE:
             self.suspectCombo.addItem(suspect)

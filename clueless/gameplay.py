@@ -23,6 +23,7 @@ class game():
     deck = None
     caseFile = []
     turnOrder = []
+    disproveOrder = []
     board = None
 
     def __init__(self):
@@ -166,6 +167,8 @@ class game():
                     self.turnOrder.append(self.players[player])
 
         self.currentPlayer = self.turnOrder[0]
+        
+        self.disproveOrder = self.turnOrder
 
 class carddeck():
     cards = []
