@@ -5,8 +5,8 @@ import socket
 import server
 
 def main():
-    #s = server('192.168.100.14', 4004)
-    s = server.server('10.0.1.10', 4004)
+    s = server.server('192.168.100.14', 4004)
+    #s = server.server('10.0.1.10', 4004)
     
     while True:
         try:

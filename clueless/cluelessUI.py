@@ -21,17 +21,18 @@ class MainWindow(QtGui.QMainWindow):
     falseAccusationSignal = QtCore.pyqtSignal()
     gameOverSignal = QtCore.pyqtSignal(str)
     winSignal = QtCore.pyqtSignal()
+    shownSignal = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super(MainWindow, self).__init__()
         self.hasAccusation = True
         
         # Make a connection to the Clue-Less server
-        host = '69.255.109.89'
-        port = 40004
+        #host = '69.255.109.89'
+        #port = 40004
         #host = '127.0.0.1'
-        # host = '192.168.41.27'
-        #port = 4004
+        host = '192.168.100.14'
+        port = 4004
         self.connectToServer(host, port)
         
         # Connect all signals to their respective slot
@@ -46,14 +47,25 @@ class MainWindow(QtGui.QMainWindow):
         self.falseAccusationSignal.connect(self.eliminateMoves)
         self.gameOverSignal.connect(self.gameOver)
         self.winSignal.connect(self.youWin)
-        
+        self.shownSignal.connect(self.showCard)
+
         # Create custom dialogs
         self.getUsername = UsernameDialog()
+        self.getUsername.edit.returnPressed.connect(self.handleUsername)
         self.getCharacter = CharacterDialog()
+        self.getCharacter.button.clicked.connect(self.handleCharacterChoice)
         self.getSuggestion = SuggestionDialog()
+        self.getSuggestion.button.clicked.connect(self.handleSuggestion)
         self.getReveal = RevealDialog()
+        self.getReveal.button.clicked.connect(self.handleRevealChoice)
         self.getAccusation = AccusationDialog(self)
+        self.getAccusation.button.clicked.connect(self.handleAccusationChoice)
         
+        self.timer = QtCore.QTimer()
+        self.timer.setInterval(1000)
+        self.timer.timeout.connect(self.handleTimer)
+        self.timerState = False
+
         self.initUI()
         self.createReceiveThread()
         
@@ -90,7 +102,6 @@ class MainWindow(QtGui.QMainWindow):
     def showUsernameDialog(self):
         self.setDisabled(True)
         self.setWindowOpacity(0.90)
-    	self.getUsername.edit.returnPressed.connect(self.handleUsername)
     	self.getUsername.show()
 
     # Sends the user entered username to server
@@ -109,7 +120,6 @@ class MainWindow(QtGui.QMainWindow):
             if character not in pickle.loads(str(used)):
                 self.getCharacter.characterList.addItem(character)
         self.getCharacter.characterList.setCurrentRow(0)
-        self.getCharacter.button.clicked.connect(self.handleCharacterChoice)
         self.getCharacter.show()
 
     # Sends the character choice to the server
@@ -210,6 +220,29 @@ class MainWindow(QtGui.QMainWindow):
         sip.delete(self.moveGroup.layout())
         self.moveGroup.setLayout(layout)
 
+        # Send popup notification
+        if not self.isActiveWindow():
+            self.timer.start()
+        self.setDisabled(True)
+        self.setWindowOpacity(0.9)
+        notify = QtGui.QMessageBox.information(self, 'Your Turn',
+                                               'It is now your turn!')
+        if notify == QtGui.QMessageBox.Ok:
+            self.setWindowOpacity(1.)
+            self.setDisabled(False)
+
+    def handleTimer(self):
+        if self.isActiveWindow():
+            self.timer.stop()
+            self.timerState = False
+        
+        if self.timerState:
+            self.setWindowTitle('Your turn!')
+            self.timerState = False
+        else:
+            self.setWindowTitle('ClueLess')
+            self.timerState = True
+
     def handleMoveChoice(self, space):
         def clicked():
             self.connection.send('function::movePlayer:' + space)
@@ -241,7 +274,7 @@ class MainWindow(QtGui.QMainWindow):
         self.moveGroup.setLayout(layout)
 
     def handleAccusation(self):
-        self.getAccusation.button.clicked.connect(self.handleAccusationChoice)
+        
         self.setDisabled(True)
         self.setWindowOpacity(0.90)
         self.getAccusation.show()
@@ -289,9 +322,11 @@ class MainWindow(QtGui.QMainWindow):
     def showSuggestionDialog(self):
         self.setDisabled(True)
         self.setWindowOpacity(.90)
-        self.getSuggestion.button.clicked.connect(self.handleSuggestion)
+        
         self.getSuggestion.show()
-
+        for i in reversed(range(self.moveGroup.layout().count())):
+            self.moveGroup.layout().itemAt(i).widget().setDisabled(True)
+        
     def handleSuggestion(self):
         suggestion = [self.getSuggestion.suspectCombo.currentText(),
                       self.getSuggestion.weaponCombo.currentText()]
@@ -312,7 +347,6 @@ class MainWindow(QtGui.QMainWindow):
         for card in cards:
             self.getReveal.cardList.addItem(card)
         self.getReveal.cardList.setCurrentRow(0)
-        self.getReveal.button.clicked.connect(self.handleRevealChoice)
         self.getReveal.show()
         
     def handleRevealChoice(self):
@@ -342,6 +376,17 @@ class MainWindow(QtGui.QMainWindow):
         self.setWindowOpacity(0.90)
         win = QtGui.QMessageBox.information(self, 'Congratulations!', 'Congratulations! You Win!',
                                             QtGui.QMessageBox.Ok, QtGui.QMessageBox.Ok)
+
+    def showCard(self, message):
+        self.setDisabled(True)
+        self.setWindowOpacity(0.90)
+        shownCard = QtGui.QMessageBox.information(self, 'Card Revealed',
+                                                  message)
+        if shownCard == QtGui.QMessageBox.Ok:
+            self.setWindowOpacity(1.)
+            self.setDisabled(False)
+            for i in reversed(range(self.moveGroup.layout().count())):
+                self.moveGroup.layout().itemAt(i).widget().setDisabled(False)
         
     def createReceiveThread(self):
         def threaded():
@@ -374,6 +419,8 @@ class MainWindow(QtGui.QMainWindow):
                                 self.falseAccusationSignal.emit()
                             elif splt2[0] == 'winner':
                                 self.winSignal.emit()
+                            elif splt2[0] == 'shown':
+                                self.shownSignal.emit(splt2[1])
             except (SystemExit, KeyboardInterrupt):
                 sys.exit()
         self.receiveThread = thread.start_new_thread(threaded, ())    

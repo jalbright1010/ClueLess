@@ -53,7 +53,7 @@ class server():
 
     def broadcastMessageToAll(self, type, message):
         # Send a message to all users
-        print message
+        #print message
         for conn in self.users.values():
             try:
                 time.sleep(.05)
@@ -66,7 +66,7 @@ class server():
 
     def broadcastMessageToAllExcept(self, type, user, message):
         # Send a message to all users except @arg user
-        print message
+        #print message
         for name, conn in self.users.items():
             if name != user:
                 try:
@@ -80,7 +80,7 @@ class server():
 
     def broadcastMessageToUser(self, type, name, message):
         # Send a message to specific user @arg name
-        print message
+        #print message
         try:
             time.sleep(.05)
             if not type:
@@ -182,8 +182,8 @@ class server():
         # If they have none of the suggested cards, move to the next person
         # If they have one of the cards, send a signal to have them choose which card to reveal
         for i in range(1,len(self.game.disproveOrder)):
-            person = self.game.turnOrder[i].name
-            cards = self.game.turnOrder[i].cards
+            person = self.game.disproveOrder[i].name
+            cards = self.game.disproveOrder[i].cards
             show = []
             if suspect in cards:
                 show.append(cards[suspect])
@@ -225,4 +225,4 @@ class server():
 
     def revealCard(self, name, card, person):
         self.broadcastMessageToUser(0, name, 'You have shown %s the %s card.' % (person,card))
-        self.broadcastMessageToUser(0, person, '%s has shown you the %s card.' % (name,card))
+        self.broadcastMessageToUser(1, person, 'shown:%s has shown you the %s card.' % (name,card))
