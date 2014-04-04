@@ -142,7 +142,7 @@ class server():
         self.playerLocations[player.character] = newSpace.identifier
         self.broadcastMessageToAllExcept(1, name, 'updateGameboard:'+pickle.dumps(self.playerLocations))
         if isinstance(oldSpace, gameplay.hallway):
-	       oldSpace.occupied = False
+            oldSpace.occupied = False
         
 
     def sendTurnMessage(self):
@@ -174,8 +174,7 @@ class server():
         # If so, update that player's current space
         for player in self.game.players.values():
             if player.character == suspect:
-                player.currentSpace = self.game.board[room]
-        self.playerLocations[suspect] = room
+                self.movePlayer(player.name,room)
         # Tell everyone to redraw their gameboards
         self.broadcastMessageToAll(1, 'updateGameboard:'+pickle.dumps(self.playerLocations))
         # Iterate through the disprove order
