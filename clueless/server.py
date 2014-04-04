@@ -174,7 +174,11 @@ class server():
         # If so, update that player's current space
         for player in self.game.players.values():
             if player.character == suspect:
-                self.movePlayer(player.name,room)
+                oldSpace = player.currentSpace
+                player.currentSpace = self.game.board[room]
+                if isinstance(oldSpace,gameplay.hallway):
+                    oldSpace.occupied = False
+        self.playerLocations[suspect] = room
         # Tell everyone to redraw their gameboards
         self.broadcastMessageToAll(1, 'updateGameboard:'+pickle.dumps(self.playerLocations))
         # Iterate through the disprove order
