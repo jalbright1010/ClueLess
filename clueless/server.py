@@ -203,7 +203,7 @@ class server():
                 break
         if not disproved:
             self.broadcastMessageToUser(1, name, 'shown:No one could disprove your suggestion!')
-            self.broadcastMessageToAllExcept(0, name, 'No one could disprove %s\'s suggestion')
+            self.broadcastMessageToAllExcept(0, name, 'No one could disprove %s\'s suggestion' % name)
 
     def handleAccusation(self, name, pickled):
         accusation = pickle.loads(str(pickled))
