@@ -1,6 +1,5 @@
 #!/usr/bin/python
-#board = 207,83,0
-#rest = 145,9,47
+
 import socket
 import time
 import sys
@@ -73,6 +72,8 @@ class MainWindow(QtGui.QMainWindow):
         
     # Initalize the GUI
     def initUI(self):
+        self.setWindowTitle('Clue-Less')
+        self.setStyleSheet('QMainWindow { background-color: rgb(0,120,0) }')
         self.initWidth = (QtGui.QDesktopWidget().availableGeometry().width() * .9)
         self.initHeight = (QtGui.QDesktopWidget().availableGeometry().height() * .9)
         self.resize(self.initWidth, self.initHeight)
@@ -97,7 +98,7 @@ class MainWindow(QtGui.QMainWindow):
         self.centralWidget.form.addRow(self.createChatGroup(), self.createMoveGroup())
         
         self.centralWidget.setLayout(self.centralWidget.form)
-        
+
     def createNotepad(self):
         group = QtGui.QGroupBox()
         group.setTitle('Notepad')
