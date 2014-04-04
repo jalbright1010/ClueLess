@@ -181,6 +181,7 @@ class server():
         # Iterate through the disprove order
         # If they have none of the suggested cards, move to the next person
         # If they have one of the cards, send a signal to have them choose which card to reveal
+        disproved = False
         for i in range(1,len(self.game.disproveOrder)):
             person = self.game.disproveOrder[i].name
             cards = self.game.disproveOrder[i].cards
@@ -195,7 +196,10 @@ class server():
                 continue
             else:
                 self.broadcastMessageToUser(1, person, 'revealCard:'+pickle.dumps([x.identifier for x in show])+':'+name)
+                disproved = True
                 break
+        if not disproved:
+            self.broadcastMessageToUser(1, name, 'shown:No one could disprove your suggestion!')
 
     def handleAccusation(self, name, pickled):
         accusation = pickle.loads(str(pickled))

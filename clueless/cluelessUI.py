@@ -206,7 +206,10 @@ class MainWindow(QtGui.QMainWindow):
         layout = QtGui.QFormLayout()
         
         for space in moves:
-            label = QtGui.QLabel('Move to %s...' % space)
+            if '-' in space:
+                label = QtGui.QLabel('Move to %s Hallway...' % space)
+            else:
+                label = QtGui.QLabel('Move to %s...' % space)
             button = QtGui.QPushButton('Move')
             button.clicked.connect(self.handleMoveChoice(space))
             layout.addRow(label, button)
