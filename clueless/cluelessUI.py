@@ -1,5 +1,6 @@
 #!/usr/bin/python
-
+#board = 207,83,0
+#rest = 145,9,47
 import socket
 import time
 import sys
@@ -83,14 +84,58 @@ class MainWindow(QtGui.QMainWindow):
 
         self.centralWidget.form = QtGui.QFormLayout()
         
+        self.splitter = QtGui.QSplitter()
+        
         self.cardGroup = QtGui.QGroupBox()
         self.cardGroup.setTitle('Cards')
-        
-        self.centralWidget.form.addRow(self.createBoard(), self.cardGroup)
+        self.notepad = self.createNotepad()
+
+        self.splitter.addWidget(self.cardGroup)
+        self.splitter.addWidget(self.notepad)
+
+        self.centralWidget.form.addRow(self.createBoard(), self.splitter)
         self.centralWidget.form.addRow(self.createChatGroup(), self.createMoveGroup())
         
         self.centralWidget.setLayout(self.centralWidget.form)
         
+    def createNotepad(self):
+        group = QtGui.QGroupBox()
+        group.setTitle('Notepad')
+        layout = QtGui.QFormLayout()
+
+        suspectGroup = QtGui.QGroupBox()
+        suspectLayout = QtGui.QGridLayout()
+        for i in range(0,3):
+            suspectLayout.addWidget(QtGui.QCheckBox(gameplay.PEOPLE[i]),0,i)
+        for i in range(3,6):
+            suspectLayout.addWidget(QtGui.QCheckBox(gameplay.PEOPLE[i]),1,i-3)
+        suspectGroup.setLayout(suspectLayout)
+
+        roomGroup = QtGui.QGroupBox()
+        roomLayout = QtGui.QGridLayout()
+        for i in range(0,3):
+            roomLayout.addWidget(QtGui.QCheckBox(gameplay.ROOMS[i]),0,i)
+        for i in range(3,6):
+            roomLayout.addWidget(QtGui.QCheckBox(gameplay.ROOMS[i]),1,i-3)
+        for i in range(6,9):
+            roomLayout.addWidget(QtGui.QCheckBox(gameplay.ROOMS[i]),2,i-6)
+        roomGroup.setLayout(roomLayout)
+
+        weaponGroup = QtGui.QGroupBox()
+        weaponLayout = QtGui.QGridLayout()
+        for i in range(0,3):
+            weaponLayout.addWidget(QtGui.QCheckBox(gameplay.WEAPONS[i]),0,i)
+        for i in range(3,6):
+            weaponLayout.addWidget(QtGui.QCheckBox(gameplay.WEAPONS[i]),1,i-3)
+        weaponGroup.setLayout(weaponLayout)
+
+        layout.addRow(suspectGroup)
+        layout.addRow(roomGroup)
+        layout.addRow(weaponGroup)
+
+        group.setLayout(layout)
+        return group
+
     # Appends a message to the message log area 
     # when a message is received
     @QtCore.pyqtSlot(str)
