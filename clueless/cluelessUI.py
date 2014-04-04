@@ -58,9 +58,10 @@ class MainWindow(QtGui.QMainWindow):
         self.getSuggestion.button.clicked.connect(self.handleSuggestion)
         self.getReveal = RevealDialog()
         self.getReveal.button.clicked.connect(self.handleRevealChoice)
-        self.getAccusation = AccusationDialog(self)
+        self.getAccusation = AccusationDialog()
         self.getAccusation.button.clicked.connect(self.handleAccusationChoice)
-        
+        self.getAccusation.cancel.clicked.connect(self.handleAccusationCancel)
+
         self.timer = QtCore.QTimer()
         self.timer.setInterval(1000)
         self.timer.timeout.connect(self.handleTimer)
@@ -277,7 +278,6 @@ class MainWindow(QtGui.QMainWindow):
         self.moveGroup.setLayout(layout)
 
     def handleAccusation(self):
-        
         self.setDisabled(True)
         self.setWindowOpacity(0.90)
         self.getAccusation.show()
@@ -288,10 +288,15 @@ class MainWindow(QtGui.QMainWindow):
                       self.getAccusation.roomCombo.currentText()]
         self.connection.send('function::makingAccusation:' + 
                              pickle.dumps(accusation))
-        self.getAccusation.close()
+        self.getAccusation.closeEvent(QtGui.QCloseEvent(), valid=True)
         self.setWindowOpacity(1.)
         self.setDisabled(False)
         self.hasAccusation = False
+
+    def handleAccusationCancel(self):
+        self.getAccusation.closeEvent(QtGui.QCloseEvent(), valid=True)
+        self.setWindowOpacity(1.)
+        self.setDisabled(False)
 
     def sendMessage(self):
         self.connection.send('message::' + str(self.inputWindow.text()))
@@ -532,6 +537,8 @@ class AccusationDialog(QtGui.QDialog):
         self.weaponCombo = QtGui.QComboBox()
         self.button = QtGui.QPushButton('Make Accusation')
         self.button.setFixedSize(125, 25)
+        self.cancel = QtGui.QPushButton('Cancel')
+        self.cancel.setFixedSize(75,25)
         
         for suspect in gameplay.PEOPLE:
             self.suspectCombo.addItem(suspect)
@@ -544,14 +551,16 @@ class AccusationDialog(QtGui.QDialog):
         layout.addRow(self.suspectCombo)
         layout.addRow(self.roomCombo)
         layout.addRow(self.weaponCombo)
-        layout.addRow(self.button)
+        layout.addRow(self.button,self.cancel)
         
         self.setLayout(layout)
+
+    def closeEvent(self, event, valid=False):
+        if not valid:
+            event.ignore()
+        else:
+            super(AccusationDialog, self).closeEvent(event)
     
-    def closeEvent(self, event):
-        self.parent().setWindowOpacity(1.0)
-        self.parent().setDisabled(False)
- 
 def main():
     app = QtGui.QApplication(sys.argv)
     window = MainWindow()
