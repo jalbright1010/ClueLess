@@ -207,7 +207,8 @@ class server():
         suspect = str(accusation[0])
         weapon = str(accusation[1])
         room = str(accusation[2])
-        self.broadcastMessageToAll(0, '%s accuses %s of committing the crime in the %s with the %s.' % (name,suspect,room,weapon))
+        self.broadcastMessageToAll(0, '%s accuses %s of committing the crime in the %s with the %s.' 
+                                   % (name,suspect,room,weapon))
         caseFile = [x.identifier for x in self.game.caseFile]
         correct = True
         for card in accusation:
@@ -223,9 +224,12 @@ class server():
             self.game.turnOrder = [x for x in self.game.turnOrder if x.name != name]
             if isinstance(self.game.players[name].currentSpace, gameplay.hallway):
                 self.game.players[name].currentSpace = self.game.players[name].currentSpace.connections[0]
-                self.playerLocations[self.game.players[name].character] = self.game.players[name].currentSpace.identifier
+                self.playerLocations[self.game.players[name].character] = \
+                    self.game.players[name].currentSpace.identifier
                 self.broadcastMessageToAll(1, 'updateGameboard:'+pickle.dumps(self.playerLocations))
             self.broadcastMessageToUser(1, name, 'falseAccusation')
+            self.game.currentPlayer = self.game.turnOrder[0]
+            self.sendTurnMessage()
 
 
     def revealCard(self, name, card, person):
