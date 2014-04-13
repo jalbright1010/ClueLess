@@ -4,9 +4,14 @@ import time
 import socket
 import server
 
+# Main event loop
 def main():
-    s = server.server('192.168.100.14', 4004)
-    #s = server.server('10.0.1.10', 4004)
+    """ 
+    Main event loop that launches a Clue-Less server and listens for incoming
+    connections and messages from clients.
+    """
+    #s = server.server('localhost', 4004)
+    s = server.server('10.0.1.10', 4004)
     
     while True:
         try:
@@ -34,16 +39,15 @@ def main():
                         elif splt2[0] == 'joinGame':
                             s.joinGame(name, splt2[1])
                         elif splt2[0] == 'ready':
-                            s.broadcastMessageToAll(0, '%s is ready to start!' % name)
-                            s.playersReady.append(name)
+                            s.addReadyPlayer(name)
                         elif splt2[0] == 'start':
                             s.startGame(name)
                         elif splt2[0] == 'movePlayer':
-                            s.movePlayer(name,splt2[1])
+                            s.handleMove(name,splt2[1])
                         elif splt2[0] == 'endTurn':
                             s.endTurn(name)
                         elif splt2[0] == 'makingSuggestion':
-                            s.makeSuggestion(name,splt2[1])
+                            s.handleSuggestion(name,splt2[1])
                         elif splt2[0] == 'revealCard':
                             s.revealCard(name,splt2[1],splt2[2])
                         elif splt2[0] == 'makingAccusation':
@@ -53,11 +57,7 @@ def main():
                 else:
                     if not message:
                         # Empty string is given on disconnect
-                        del s.users[name]
-                        if s.game:
-                            if name in s.game.players:
-                                del s.game.players[name]
-                        s.broadcastMessageToAll(0, '--- %s leaves ---' % name)
+                        s.removePlayer(name)
             time.sleep(.1)
         except (SystemExit, KeyboardInterrupt):
             break
