@@ -9,9 +9,12 @@ class board(QtGui.QFrame):
     
     def __init__(self, width, height):
         super(board, self).__init__()
-        self.resize(width, height)
+        self.setMinimumSize(width,height)
+        #self.setFixedSize(width, height)
+        self.resize(width,height)
         self.players = {}
-        
+        self.update()
+
         width = self.width()
         height = self.height()
         
@@ -284,8 +287,8 @@ class board(QtGui.QFrame):
     def paintEvent(self, e):
         qp = QtGui.QPainter()
         self.draw(qp)
-        self.setStyleSheet('border-image: url(./images/tabletop.jpg)')
-        self.setAutoFillBackground(True)
+        #self.setStyleSheet('border-image: url(./images/tabletop.jpg)')
+        #self.setAutoFillBackground(True)
 
     def draw(self, qp):
         qp.begin(self)
@@ -334,55 +337,55 @@ class board(QtGui.QFrame):
                
         # Draw Rooms
         # Study
-        qp.setBrush(QtGui.QColor(0, 0, 0))
+        qp.setBrush(QtGui.QColor(0, 0, 100))
         qp.drawRect(self.studyXPos, self.studyYPos, self.rectSize, self.rectSize)
         qp.setPen(QtGui.QColor(255,255,255))
         qp.drawText(self.studyTextXPos, self.studyTextYPos, 'Study')
         qp.setPen(color)
         # Hall
-        qp.setBrush(QtGui.QColor(255, 255, 255))
+        qp.setBrush(QtGui.QColor(220, 190, 105))
         qp.drawRect(self.hallXPos, self.hallYPos, self.rectSize, self.rectSize)
         qp.setPen(QtGui.QColor(0,0,0))
         qp.drawText(self.hallTextXPos, self.hallTextYPos, 'Hall') 
         qp.setPen(color)
         #Lounge
-        qp.setBrush(QtGui.QColor(0, 0, 0))
+        qp.setBrush(QtGui.QColor(0, 0, 100))
         qp.drawRect(self.loungeXPos, self.loungeYPos, self.rectSize, self.rectSize)
         qp.setPen(QtGui.QColor(255,255,255))
         qp.drawText(self.loungeTextXPos, self.loungeTextYPos, 'Lounge')
         qp.setPen(color)
         # Library
-        qp.setBrush(QtGui.QColor(255, 255, 255))
+        qp.setBrush(QtGui.QColor(220, 190, 105))
         qp.drawRect(self.libraryXPos, self.libraryYPos, self.rectSize, self.rectSize)
         qp.setPen(QtGui.QColor(0,0,0))
         qp.drawText(self.libraryTextXPos, self.libraryTextYPos, 'Library')
         qp.setPen(color)
         # Billiard Room
-        qp.setBrush(QtGui.QColor(0, 0, 0))
+        qp.setBrush(QtGui.QColor(0, 0, 100))
         qp.drawRect(self.billiardXPos, self.billiardYPos, self.rectSize, self.rectSize)
         qp.setPen(QtGui.QColor(255,255,255))
         qp.drawText(self.billiardTextXPos, self.billiardTextYPos, 'Billiard Room')
         qp.setPen(color)
         # Dining Room
-        qp.setBrush(QtGui.QColor(255, 255, 255))
+        qp.setBrush(QtGui.QColor(220, 190, 105))
         qp.drawRect(self.diningXPos, self.diningYPos, self.rectSize, self.rectSize)
         qp.setPen(QtGui.QColor(0,0,0))
         qp.drawText(self.diningTextXPos, self.diningTextYPos, 'Dining Room')
         qp.setPen(color)
         # Conservatory
-        qp.setBrush(QtGui.QColor(0, 0, 0))
+        qp.setBrush(QtGui.QColor(0, 0, 100))
         qp.drawRect(self.conservatoryXPos, self.conservatoryYPos, self.rectSize, self.rectSize)
         qp.setPen(QtGui.QColor(255,255,255))
         qp.drawText(self.conservatoryTextXPos, self.conservatoryTextYPos, 'Conservatory')
         qp.setPen(color)
         # Ballroom
-        qp.setBrush(QtGui.QColor(255, 255, 255))
+        qp.setBrush(QtGui.QColor(220, 190, 105))
         qp.drawRect(self.ballroomXPos, self.ballroomYPos, self.rectSize, self.rectSize)
         qp.setPen(QtGui.QColor(0,0,0))
         qp.drawText(self.ballroomTextXPos, self.ballroomTextYPos, 'Ballroom')
         qp.setPen(color)
         # Kitchen
-        qp.setBrush(QtGui.QColor(0, 0, 0))
+        qp.setBrush(QtGui.QColor(0, 0, 100))
         qp.drawRect(self.kitchenXPos, self.kitchenYPos, self.rectSize, self.rectSize)
         qp.setPen(QtGui.QColor(255,255,255))
         qp.drawText(self.kitchenTextXPos, self.kitchenTextYPos, 'Kitchen')

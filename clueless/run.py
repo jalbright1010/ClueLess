@@ -10,8 +10,8 @@ def main():
     Main event loop that launches a Clue-Less server and listens for incoming
     connections and messages from clients.
     """
-    #s = server.server('localhost', 4004)
-    s = server.server('10.0.1.10', 4004)
+    s = server.server('192.168.100.14', 4004)
+    #s = server.server('10.0.1.10', 4004)
     
     while True:
         try:
@@ -27,9 +27,10 @@ def main():
             # Read from connections
             for name, conn in s.users.items():
                 try:
-                    message = conn.recv(1024).strip()
+                    r = conn.recv(1024).strip()
                 except socket.error:
                     continue
+                message = s.decrypt(r)
                 if '::' in message:
                     splt = message.split('::')
                     if splt[0] == 'function':

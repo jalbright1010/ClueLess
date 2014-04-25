@@ -46,19 +46,21 @@ class server():
         def threaded():
             while True:
                 time.sleep(.05)
-                conn.send('function::username')
+                conn.send(self.encrypt('function::username'))
                 try:
-                    name = conn.recv(1024).strip()
+                    r = conn.recv(1024).strip()
+                    name = self.decrypt(r)
                 except socket.error:
                     print 'Socket connection error'
                     break
                 if name in self.users:
                     time.sleep(.05)
-                    conn.send('Username already in use.\n')
+                    conn.send(self.encrypt('Username already in use.\n'))
                 elif name:
                     conn.setblocking(False)
                     self.users[name] = conn
-                    self.broadcastMessageToAllExcept(0, name,'+++ %s arrived +++' % name)
+                    self.broadcastMessageToAllExcept(0, name, '+++ %s arrived +++' % name)
+                    self.broadcastMessageToUser(0, name, 'Welcome, %s!' % name)
                     self.broadcastMessageToUser(1, name, 'usedChars:'+pickle.dumps([x.character for x in self.game.players.values()]))
                     break
         self.acceptThread = thread.start_new_thread(threaded, ())
@@ -86,9 +88,9 @@ class server():
             try:
                 time.sleep(.05)
                 if not type:
-                    conn.send('message::'+message)
+                    conn.send(self.encrypt('message::'+ message))
                 elif type:
-                    conn.send('function::'+message)
+                    conn.send(self.encrypt('function::'+ message))
             except:
                 pass
 
@@ -108,9 +110,9 @@ class server():
                 try:
                     time.sleep(.05)
                     if not type:
-                        conn.send('message::'+message)
+                        conn.send(self.encrypt('message::'+ message))
                     elif type:
-                        conn.send('function::'+message)
+                        conn.send(self.encrypt('function::'+ message))
                 except:
                     pass
 
@@ -128,9 +130,9 @@ class server():
         try:
             time.sleep(.05)
             if not type:
-                self.users[name].send('message::'+message)
+                self.users[name].send(self.encrypt('message::'+ message))
             elif type:
-                self.users[name].send('function::'+message)
+                self.users[name].send(self.encrypt('function::'+ message))
         except:
             pass
 
@@ -140,6 +142,22 @@ class server():
         """
         self.game = gameplay.game()
         print 'Game created with id %s' % self.game.id
+
+    def decrypt(self, message):
+        """
+        Decrypt message.
+        Keyword Arguments:
+        message -- string message to be decrypted.
+        """
+        return ''.join([chr(ord(x) - 11) for x in message])
+
+    def encrypt(self, message):
+        """
+        Encrypt message.
+        Keyword Arguments:
+        message -- string message to be encrypted.
+        """
+        return ''.join([chr(ord(x) + 11) for x in message])
     
     def endTurn(self, name):
         """
@@ -283,7 +301,8 @@ class server():
         del self.users[name]
         if self.game:
             if name in self.game.players:
-                del self.playerLocations[self.game.players[name].character]
+                if not self.game.started:
+                    del self.playerLocations[self.game.players[name].character]
                 self.game.removePlayer(name)
         self.broadcastMessageToAll(0, '--- %s leaves ---' % name) 
         self.broadcastMessageToAll(1, 'updateGameboard:'+pickle.dumps(self.playerLocations))
@@ -316,25 +335,26 @@ class server():
         name -- name of user who started the game as string.
         """
         if self.game:
-            # Verify that all players are ready
-            if len(self.playersReady) == len(self.users):
-                self.game.start()
-                self.broadcastMessageToAll(0, '%s has started the game! Good Luck!' % name)
-                # No longer accept new connections to server
-                self.acceptingConnections = False
-                # Set initial locations for characters not in use by a client
-                for char in consts.SUSPECTS:
-                    if char not in self.playerLocations:
-                        self.playerLocations[char] = char+'Home'
-                self.broadcastMessageToAll(1, 'updateGameboard:'+pickle.dumps(self.playerLocations))
-                # Send cards to each client
-                for name in self.users.keys():
-                    self.broadcastMessageToUser(1, name, 'cards:'+pickle.dumps([x.identifier for x in self.game.players[name].cards.values()]))
-                # Notify the first user of their turn
-                self.sendTurnMessage()
-            else:
-                # Tell user who is not ready to play
-                self.broadcastMessageToUser(0, name, 'Not all players are ready to start....')
-                for n in self.users.keys():
-                    if n not in self.playersReady:
-                        self.broadcastMessageToUser(0, name, '%s is not ready to start' % n)
+            if not self.game.started:
+                # Verify that all players are ready
+                if len(self.playersReady) == len(self.users):
+                    self.game.start()
+                    self.broadcastMessageToAll(0, '%s has started the game! Good Luck!' % name)
+                    # No longer accept new connections to server
+                    self.acceptingConnections = False
+                    # Set initial locations for characters not in use by a client
+                    for char in consts.SUSPECTS:
+                        if char not in self.playerLocations:
+                            self.playerLocations[char] = char+'Home'
+                    self.broadcastMessageToAll(1, 'updateGameboard:'+pickle.dumps(self.playerLocations))
+                    # Send cards to each client
+                    for name in self.users.keys():
+                        self.broadcastMessageToUser(1, name, 'cards:'+pickle.dumps([x.identifier for x in self.game.players[name].cards.values()]))
+                    # Notify the first user of their turn
+                    self.sendTurnMessage()
+                else:
+                    # Tell user who is not ready to play
+                    self.broadcastMessageToUser(0, name, 'Not all players are ready to start....')
+                    for n in self.users.keys():
+                        if n not in self.playersReady:
+                            self.broadcastMessageToUser(0, name, '%s is not ready to start' % n)

@@ -35,10 +35,10 @@ class MainWindow(QtGui.QMainWindow):
         self.hasAccusation = True
         
         # Make a connection to the Clue-Less server
-        host = '69.255.109.89'
-        port = 40004
-        # host = '192.168.100.14'
-        #port = 4004
+        #host = '69.255.109.89'
+        #port = 40004
+        host = '192.168.100.14'
+        port = 4004
         self.connectToServer(host, port)
         
         # Connect all signals to their respective slot
@@ -105,6 +105,7 @@ class MainWindow(QtGui.QMainWindow):
         self.splitter.addWidget(self.notepad)
 
         self.centralWidget.form.addRow(self.createBoard(), self.splitter)
+        self.splitter.hide()
         self.centralWidget.form.addRow(self.createGameLogArea(), self.createMoveGroup())
         
         self.centralWidget.setLayout(self.centralWidget.form)
@@ -135,19 +136,26 @@ class MainWindow(QtGui.QMainWindow):
         layout = QtGui.QFormLayout()
         row1 = QtGui.QHBoxLayout()
         row2 = QtGui.QHBoxLayout()
+        row3 = QtGui.QHBoxLayout()
+        row4 = QtGui.QHBoxLayout()
         for card in cards[:3]:
             label = QtGui.QLabel()
             pixmap = QtGui.QPixmap('images/' + card + '.jpg')
             label.setPixmap(pixmap.scaled(self.width()/12, self.width()/8))
             row1.addWidget(label)
+            row2.addWidget(QtGui.QLabel(card))
         for card in cards[3:6]:
             label = QtGui.QLabel()
             pixmap = QtGui.QPixmap('images/' + card + '.jpg')
             label.setPixmap(pixmap.scaled(self.width()/12, self.width()/8))
-            row2.addWidget(label)
+            row3.addWidget(label)
+            row4.addWidget(QtGui.QLabel(card))
         layout.addRow(row1)
         layout.addRow(row2)
-        self.cardGroup.setLayout(layout)   
+        layout.addRow(row3)
+        layout.addRow(row4)
+        self.cardGroup.setLayout(layout)
+        self.splitter.show()
     
     @QtCore.pyqtSlot(str)
     def createMoves(self, pickled):
@@ -295,7 +303,8 @@ class MainWindow(QtGui.QMainWindow):
         """
         Notifies user when they have won the game.
         """
-        win = QtGui.QMessageBox.information(self, 'Congratulations!', 'Congratulations! You Win!',
+        win = QtGui.QMessageBox.information(self, 'Congratulations!', 
+                                            'Congratulations! You Win!',
                                             QtGui.QMessageBox.Ok, QtGui.QMessageBox.Ok)
         
         
@@ -312,8 +321,8 @@ class MainWindow(QtGui.QMainWindow):
                       self.getAccusation.weaponCombo.currentText(),
                       self.getAccusation.roomCombo.currentText()]
         # Send pickled list of selections to server
-        self.connection.send('function::makingAccusation:' + 
-                             pickle.dumps(accusation))
+        self.connection.send(self.encrypt('function::makingAccusation:' + 
+                             pickle.dumps(accusation)))
         self.getAccusation.closeEvent(QtGui.QCloseEvent(), valid=True)
         # Only get one accusation per game
         self.hasAccusation = False
@@ -325,7 +334,7 @@ class MainWindow(QtGui.QMainWindow):
         # Get character selection from dialog box
         self.character = str(self.getCharacter.characterList.currentItem().text())
         # Request to join game as chosen character
-        self.connection.send('function::joinGame:' + self.character)
+        self.connection.send(self.encrypt('function::joinGame:' + self.character))
         self.getCharacter.closeEvent(QtGui.QCloseEvent(), valid=True)
         self.inputWindow.setReadOnly(False)
         
@@ -334,7 +343,7 @@ class MainWindow(QtGui.QMainWindow):
         Send the signal as a string to the server to end user's turn.
         """
         # Send signal to end turn to server
-        self.connection.send('function::endTurn')
+        self.connection.send(self.encrypt('function::endTurn'))
         layout = QtGui.QFormLayout()
         layout.addRow(QtGui.QLabel('Awaiting your next turn...'))
         # Remove all move buttons
@@ -353,7 +362,7 @@ class MainWindow(QtGui.QMainWindow):
         """
         def clicked():
             # Send signal to move player to desired space
-            self.connection.send('function::movePlayer:' + space)
+            self.connection.send(self.encrypt('function::movePlayer:' + space))
             # Update user's gameboard with move
             self.gameboard.players[self.character] = space
             self.gameboard.update()
@@ -384,7 +393,7 @@ class MainWindow(QtGui.QMainWindow):
         # Get the name of the person user is revealing to
         name = self.getReveal.player
         # Send signal to server to reveal chosen card
-        self.connection.send('function::revealCard:%s:%s' % (choice, name))
+        self.connection.send(self.encrypt('function::revealCard:%s:%s' % (choice, name)))
         self.getReveal.closeEvent(QtGui.QCloseEvent(), valid=True)
     
     def handleSuggestion(self):
@@ -396,8 +405,8 @@ class MainWindow(QtGui.QMainWindow):
         suggestion = [self.getSuggestion.suspectCombo.currentText(),
                       self.getSuggestion.weaponCombo.currentText()]
         # Send signal to server to make suggestion
-        self.connection.send('function::makingSuggestion:' + 
-                             pickle.dumps(suggestion))
+        self.connection.send(self.encrypt('function::makingSuggestion:' + 
+                             pickle.dumps(suggestion)))
         self.getSuggestion.closeEvent(QtGui.QCloseEvent(), valid=True)
         
     def handleUsername(self):
@@ -405,7 +414,7 @@ class MainWindow(QtGui.QMainWindow):
         Send the user entered username to the server as string.
         """
         # Get username from dialog box and send it to server
-        self.connection.send(str(self.getUsername.edit.text()))
+        self.connection.send(self.encrypt(str(self.getUsername.edit.text())))
         self.getUsername.close()
     
 
@@ -417,7 +426,6 @@ class MainWindow(QtGui.QMainWindow):
         Create the game board display and return this instance of the board.
         """
         self.gameboard = gameboard.board(self.width() / 2, self.height() / 2)
-        self.gameboard.update()
         return self.gameboard
     
     def createGameLogArea(self):
@@ -551,26 +559,42 @@ class MainWindow(QtGui.QMainWindow):
         except socket.error:
             print 'Could not connect to server'
             sys.exit()
+
+    def decrypt(self, message):
+        """
+        Decrypt message.
+        Keyword Arguments:
+        message -- string message to be decrypted.
+        """
+        return ''.join([chr(ord(x) - 11) for x in message])
+
+    def encrypt(self, message):
+        """
+        Encrypt message.
+        Keyword Arguments:
+        message -- string message to be encrypted.
+        """
+        return ''.join([chr(ord(x) + 11) for x in message])
       
     def sendReadySignal(self):
         """
         Notify server that the user is ready to play.
         """
-        self.connection.send('function::ready')
+        self.connection.send(self.encrypt('function::ready'))
         self.readyAction.setEnabled(False)
             
     def sendStartSignal(self):
         """
         Notify server that the user has started the game.
         """
-        self.connection.send('function::start')
+        self.connection.send(self.encrypt('function::start'))
         self.startAction.setEnabled(False) 
 
     def sendMessage(self):
         """
         Send a user entered message from message input window.
         """
-        self.connection.send('message::' + str(self.inputWindow.text()))
+        self.connection.send(self.encrypt('message::' + str(self.inputWindow.text())))
         self.inputWindow.clear()
 
     
@@ -585,7 +609,8 @@ class MainWindow(QtGui.QMainWindow):
         def threaded():
             try:
                 while True:
-                    s = self.connection.recv(1024).strip()
+                    r = self.connection.recv(1024).strip()
+                    s = self.decrypt(r)
                     if '::' in s:
                         splt = s.split('::')
                         if splt[0] == 'message':
