@@ -24,12 +24,12 @@ class board(QtGui.QFrame):
         self.playerSize = self.rectSize/6
         
         # Room coordinates
-        x1Pos = (width/8) - (self.rectSize/2)
+        x1Pos = (width/8) - (self.rectSize/4)
         x2Pos = (width/2) - (self.rectSize/2)
-        x3Pos = (7*width/8) - (self.rectSize/2)
-        y1Pos = (height/8) - (self.rectSize/2)
+        x3Pos = (7*width/8) - (3*self.rectSize/4)
+        y1Pos = (height/8) - (self.rectSize/4)
         y2Pos = (height/2) - (self.rectSize/2)
-        y3Pos = (7*height/8) - (self.rectSize/2)
+        y3Pos = (7*height/8) - (3*self.rectSize/4)
         
         # Hallway coordinates
         self.hallWidth = self.rectSize/3
@@ -297,6 +297,10 @@ class board(QtGui.QFrame):
         color.setNamedColor('#d4d4d4')
         qp.setPen(color)
 
+        font1 = QtGui.QFont('Times', 10)
+        font2 = QtGui.QFont('Times', 8)
+        qp.setFont(font1)
+
         # Draw Hallways
         # Study-Hall
         qp.setBrush(QtGui.QColor(100, 100, 100))
@@ -364,6 +368,7 @@ class board(QtGui.QFrame):
         qp.setBrush(QtGui.QColor(0, 0, 100))
         qp.drawRect(self.billiardXPos, self.billiardYPos, self.rectSize, self.rectSize)
         qp.setPen(QtGui.QColor(255,255,255))
+        qp.setFont(font2)
         qp.drawText(self.billiardTextXPos, self.billiardTextYPos, 'Billiard Room')
         qp.setPen(color)
         # Dining Room
@@ -382,6 +387,7 @@ class board(QtGui.QFrame):
         qp.setBrush(QtGui.QColor(220, 190, 105))
         qp.drawRect(self.ballroomXPos, self.ballroomYPos, self.rectSize, self.rectSize)
         qp.setPen(QtGui.QColor(0,0,0))
+        qp.setFont(font1)
         qp.drawText(self.ballroomTextXPos, self.ballroomTextYPos, 'Ballroom')
         qp.setPen(color)
         # Kitchen

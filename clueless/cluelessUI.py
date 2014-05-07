@@ -35,10 +35,10 @@ class MainWindow(QtGui.QMainWindow):
         self.hasAccusation = True
         
         # Make a connection to the Clue-Less server
-        host = '69.255.109.89'
-        port = 40004
-        #host = '192.168.100.14'
-        #port = 4004
+        #host = '69.255.109.89'
+        #port = 40004
+        host = '192.168.100.14'
+        port = 4004
         self.connectToServer(host, port)
         
         # Connect all signals to their respective slot
