@@ -263,7 +263,7 @@ class server():
         # Check if anyone could disprove the suggestion
         if disprover:
             disproveCards = self.game.getDisproveList()
-            self.broadcastMessageToUser(1, person, 
+            self.broadcastMessageToUser(1, disprover, 
                                         'revealCard:'+pickle.dumps([x.identifier for x in disproveCards])+':'+name)
         else:
             self.broadcastMessageToUser(1, name, 'shown:No one could disprove your suggestion!')
