@@ -59,8 +59,8 @@ class server():
                 elif name:
                     conn.setblocking(False)
                     self.users[name] = conn
-                    self.broadcastMessageToAllExcept(0, name, '+++ %s arrived +++' % name)
-                    self.broadcastMessageToUser(0, name, 'Welcome, %s!' % name)
+                    self.broadcastMessageToAllExcept(0, name, 'Game> %s has arrived!' % name)
+                    self.broadcastMessageToUser(0, name, 'Game> Welcome %s!' % name)
                     self.broadcastMessageToUser(1, name, 'usedChars:'+pickle.dumps([x.character for x in self.game.players.values()]))
                     break
         self.acceptThread = thread.start_new_thread(threaded, ())
@@ -72,7 +72,7 @@ class server():
         name -- string name of player who is ready.
         """
         self.playersReady.append(name)
-        self.broadcastMessageToAll(0, '%s is ready to start!' % name)
+        self.broadcastMessageToAll(0, 'Game> %s is ready to start!' % name)
 
     def broadcastMessageToAll(self, type, message):
         """
@@ -165,7 +165,7 @@ class server():
         Keyword Arguments:
         name -- string name of player who ended their turn.
         """
-        self.broadcastMessageToAll(0, '%s has ended his/her turn...' % name)
+        self.broadcastMessageToAll(0, 'Game> %s ends turn...' % name)
         self.game.endTurn(name)
         self.sendTurnMessage()
         
@@ -182,7 +182,7 @@ class server():
         weapon = str(accusation[1])
         room = str(accusation[2])
         # Notify all players of accusation that was made
-        self.broadcastMessageToAll(0, '%s accuses %s of committing the crime in the %s with the %s.' 
+        self.broadcastMessageToAll(0, 'Game> %s accuses %s of committing the crime in the %s with the %s.' 
                                    % (name,suspect,room,weapon))
         caseFile = [x.identifier for x in self.game.caseFile]
         # Compare accusation cards against case file
@@ -197,8 +197,8 @@ class server():
             self.broadcastMessageToAllExcept(1, name, 'gameOver:'+name)
         # Notify all players that accusation was incorrect
         else:
-            self.broadcastMessageToUser(0, name, 'Your accusation was incorrect.')
-            self.broadcastMessageToAllExcept(0, name, '%s\'s accusation was incorrect' % name)
+            self.broadcastMessageToUser(0, name, 'Game> Your accusation was incorrect.')
+            self.broadcastMessageToAllExcept(0, name, 'Game> %s\'s accusation was incorrect' % name)
             # Remove player from turn order because they can no longer move
             self.game.turnOrder = [x for x in self.game.turnOrder if x.name != name]
             if isinstance(self.game.players[name].currentSpace, gameplay.hallway):
@@ -223,12 +223,12 @@ class server():
         """
         newSpace = self.game.movePlayer(name, space)
         if isinstance(newSpace, gameplay.hallway):
-            self.broadcastMessageToAllExcept(0, name, '%s has moved to the %s hallway.' 
+            self.broadcastMessageToAllExcept(0, name, 'Game> %s has moved to the %s hallway.' 
                                              % (name, newSpace.identifier))
         elif isinstance(newSpace, gameplay.room):
             # Ask user to make suggestion
             self.broadcastMessageToUser(1, name, 'suggestion')
-            self.broadcastMessageToAllExcept(0, name, '%s has moved to the %s.'
+            self.broadcastMessageToAllExcept(0, name, 'Game> %s has moved to the %s.'
                                              % (name, newSpace.identifier))
         # Update local player locations dictionary
         self.playerLocations[self.game.players[name].character] = newSpace.identifier
@@ -248,7 +248,7 @@ class server():
         weapon = str(suggestion[1])
         room = self.game.players[name].currentSpace.identifier
         # Notify all players of the suggestion that was made
-        self.broadcastMessageToAll(0, '%s suggests that the crime was committed in the %s by %s with the %s.' 
+        self.broadcastMessageToAll(0, 'Game> %s suggests that the crime was committed in the %s by %s with the %s.' 
                                    % (name,room,suspect,weapon))
         for player in self.game.players.values():
             # Check if alleged suspect is part of this game
@@ -267,7 +267,7 @@ class server():
                                         'revealCard:'+pickle.dumps([x.identifier for x in disproveCards])+':'+name)
         else:
             self.broadcastMessageToUser(1, name, 'shown:No one could disprove your suggestion!')
-            self.broadcastMessageToAllExcept(0, name, 'No one could disprove %s\'s suggestion' % name)
+            self.broadcastMessageToAllExcept(0, name, 'Game> No one could disprove %s\'s suggestion.' % name)
         
     def joinGame(self, name, char):
         """
@@ -285,11 +285,11 @@ class server():
                     self.broadcastMessageToUser(1, name, 'usedChars:'+pickle.dumps([x.character for x in self.game.players.values()]))
                 else:
                     self.game.addPlayer(name, char)
-                    self.broadcastMessageToAllExcept(0, name, '%s has joined the game as %s.' % (name, char))
+                    self.broadcastMessageToAllExcept(0, name, 'Game> %s has joined the game as %s.' % (name, char))
                     self.playerLocations[char] = self.game.players[name].currentSpace.identifier
                     self.broadcastMessageToAll(1, 'updateGameboard:'+pickle.dumps(self.playerLocations))
             else:
-                self.broadcastMessageToUser(0, name, 'Game already has 6 players, cannot join.')
+                self.broadcastMessageToUser(0, name, 'Game> Game already has 6 players, cannot join.')
                 self.acceptingConnections = False
      
     def removePlayer(self, name):
@@ -304,7 +304,7 @@ class server():
                 if not self.game.started:
                     del self.playerLocations[self.game.players[name].character]
                 self.game.removePlayer(name)
-        self.broadcastMessageToAll(0, '--- %s leaves ---' % name) 
+        self.broadcastMessageToAll(0, 'Game> %s has left the game.' % name) 
         self.broadcastMessageToAll(1, 'updateGameboard:'+pickle.dumps(self.playerLocations))
             
     def revealCard(self, name, card, person):
@@ -315,8 +315,8 @@ class server():
         card -- identifier of card being revealed as string.
         person -- name of player who is being shown card as string.
         """
-        self.broadcastMessageToUser(0, name, 'You have shown %s the %s card.' % (person,card))
-        self.broadcastMessageToUser(0, person, '%s has shown you the %s card.' % (name, card))
+        self.broadcastMessageToUser(0, name, 'Game> You have shown %s the %s card.' % (person,card))
+        self.broadcastMessageToUser(0, person, 'Game> %s has shown you the %s card.' % (name, card))
         self.broadcastMessageToUser(1, person, 'shown:%s has shown you the %s card.' % (name,card))
      
     def sendTurnMessage(self):
@@ -326,7 +326,7 @@ class server():
         moves = self.game.getMoves()
         # Send possible moves to player
         self.broadcastMessageToUser(1, self.game.currentPlayer.name, 'yourTurn:'+pickle.dumps([x.identifier for x in moves]))
-        self.broadcastMessageToAllExcept(0, self.game.currentPlayer.name, 'Awaiting %s to make his/her move...' % self.game.currentPlayer.name)
+        self.broadcastMessageToAllExcept(0, self.game.currentPlayer.name, 'Game> %s\'s move...' % self.game.currentPlayer.name)
            
     def startGame(self, name):
         """
@@ -339,7 +339,7 @@ class server():
                 # Verify that all players are ready
                 if len(self.playersReady) == len(self.users):
                     self.game.start()
-                    self.broadcastMessageToAll(0, '%s has started the game! Good Luck!' % name)
+                    self.broadcastMessageToAll(0, 'Game> %s has started the game! Good Luck!' % name)
                     # No longer accept new connections to server
                     self.acceptingConnections = False
                     # Set initial locations for characters not in use by a client
@@ -354,7 +354,7 @@ class server():
                     self.sendTurnMessage()
                 else:
                     # Tell user who is not ready to play
-                    self.broadcastMessageToUser(0, name, 'Not all players are ready to start....')
+                    self.broadcastMessageToUser(0, name, 'Game> Not all players are ready to start....')
                     for n in self.users.keys():
                         if n not in self.playersReady:
-                            self.broadcastMessageToUser(0, name, '%s is not ready to start' % n)
+                            self.broadcastMessageToUser(0, name, 'Game> %s is not ready to start' % n)

@@ -6,7 +6,6 @@ import sys
 import thread
 import cPickle as pickle
 import sip
-#import gameplay
 import gameboard
 import dialogs
 import consts
@@ -121,6 +120,11 @@ class MainWindow(QtGui.QMainWindow):
         Keyword Arguments:
         message -- string message received from server
         """
+        if 'Game>' in message:
+            message = str(message[5:]).strip()
+            self.messageWindow.setTextColor(QtGui.QColor(0,0,255))
+        else:
+            self.messageWindow.setTextColor(QtGui.QColor(255,0,0))
         self.messageWindow.append(message)
         self.messageWindow.moveCursor(QtGui.QTextCursor.End)
      
